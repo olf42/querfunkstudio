@@ -15,10 +15,22 @@ Index
 		{% endif %}
 		<div class="row">
 			<div class="col-md-2"></div>
+			<div class="col-md-8">
+				<p>
+				{% if superuser %}
+				<a href="/admin" class="btn btn-primary">Admin</a></a>
+				{% endif %}
+			</div>
+			<div class="col-md-2"></div>
+		</div>
+		<hr>
+
+		<div class="row">
+			<div class="col-md-2"></div>
 				<div class="col-md-8">
 					<h2>Logged in as {{username}}!</h2>
 					<p><a href="/start2">Proceed to Start2</a></p>
-					<p><a href="/logout" class="btn btn-default">Logout</a></a></p>
+					<p><a href="/logout" class="btn btn-default">Logout</a></p>
 				</div>
 			<div class="col-md-2"></div>
 		</div>

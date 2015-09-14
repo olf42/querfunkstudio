@@ -15,8 +15,11 @@ class Querfunkstudio(object):
 
     @cherrypy.expose
     def logout(self):
-        if self.user_.user_authenticated():
-            cherrypy.session['username'] = None
+        try:
+            self.user_.user_authenticated()
+        except ValueError as e:
+            return self.env.get_template('index.html').render(error=e)
+        cherrypy.session['username'] = None
         return self.env.get_template('index.html').render()
 
 
@@ -42,7 +45,10 @@ class Querfunkstudio(object):
     @cherrypy.expose
     def start(self, **kwargs):
         if len(kwargs)>0:
-            self.user_.process_request(kwargs)
+            try:
+                self.user_.process_request(kwargs)
+            except ValueError as e:
+                return self.env.get_template('index.html').render(error=e)
 
         try:
             user = self.user_.user_authenticated()
@@ -50,8 +56,10 @@ class Querfunkstudio(object):
             return self.env.get_template('index.html').render(error=e)
 
         superuser = False
-        if self.user_.superuser_authenticated:
-            superuser = True
+        try:
+            superuser = self.user_.superuser_authenticated()
+        except:
+            pass
 
         return self.env.get_template('start.html').render(username=user, superuser=superuser)
 
