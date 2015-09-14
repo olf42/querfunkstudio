@@ -29,54 +29,11 @@ SUCCESS_REGISTRATION_MSG = "Account created. Needs approval."
 class Querfunkstudio(object):
 
     def __init__(self):
-        self.user_ = Users()
-
-    def process_request(self, kwargs):
-        query = kwargs['query']
-
-        # Login Processing
-        if query == 'login':
-            username = kwargs['username']
-            password = kwargs['password']
-            try:
-                user_password = self.user_.get_password(username)[0][0]
-            except:
-                raise ValueError(ERROR_LOGIN_MSG)
-            if user_password == encrypt_pw(password):
-                cherrypy.session['username'] = username
-            else:
-                raise ValueError(ERROR_LOGIN_MSG)
-
-        # Registration Processing
-        elif query == 'register':
-            username = kwargs['username']
-            password = kwargs['password']
-            password_repeat = kwargs['password_repeat']
-            if password == password_repeat:
-                try:
-                    self.user_.add_user(username, password)
-                except ValueError:
-                    raise
-            else:
-                raise ValueError(ERROR_PASSWORD_MSG)
-
-    def user_authenticated(self):
-        try:
-            username = cherrypy.session['username']
-        except:
-            raise ValueError(ERROR_LOGIN_MSG)
-
-        try:
-            self.user_.check_username(username)
-        except ValueError:
-            cherrypy.session['username'] = None
-            raise
-
-        return username
+        self.user_ = Querfunkuser()
 
     @cherrypy.expose
     def logout(self):
-        if self.user_authenticated():
+        if self.user_.user_authenticated():
             cherrypy.session['username'] = None
         template = env.get_template('index.html')
         return template.render()
@@ -85,7 +42,7 @@ class Querfunkstudio(object):
     @cherrypy.expose
     def start2(self, **kwargs):
         try:
-            user = self.user_authenticated()
+            user = self.user_.user_authenticated()
         except ValueError as e:
             return env.get_template('index.html').render(error=e)
 
@@ -96,7 +53,7 @@ class Querfunkstudio(object):
     def register(self, **kwargs):
         if len(kwargs)>0:
             try:
-                self.process_request(kwargs)
+                self.user_.process_request(kwargs)
             except ValueError as e:
                 return env.get_template('index.html').render(error=e)
         return env.get_template('index.html').render(success=SUCCESS_REGISTRATION_MSG)
@@ -104,9 +61,9 @@ class Querfunkstudio(object):
     @cherrypy.expose
     def start(self, **kwargs):
         if len(kwargs)>0:
-            self.process_request(kwargs)
+            self.user_.process_request(kwargs)
         try:
-            user = self.user_authenticated()
+            user = self.user_.user_authenticated()
         except ValueError as e:
             return env.get_template('index.html').render(error=e)
 
@@ -155,6 +112,54 @@ class Querfunkadmin(object):
             message['type'] = LOG_DISPLAY[message['type']]
         return template.render(logs=logs)
 
+
+class Querfunkuser(object):
+
+    def __init__(self):
+        self.user_ = Users()
+
+    def process_request(self, kwargs):
+        query = kwargs['query']
+
+        # Login Processing
+        if query == 'login':
+            username = kwargs['username']
+            password = kwargs['password']
+            try:
+                user_password = self.user_.get_password(username)[0][0]
+            except:
+                raise ValueError(ERROR_LOGIN_MSG)
+            if user_password == encrypt_pw(password):
+                cherrypy.session['username'] = username
+            else:
+                raise ValueError(ERROR_LOGIN_MSG)
+
+        # Registration Processing
+        elif query == 'register':
+            username = kwargs['username']
+            password = kwargs['password']
+            password_repeat = kwargs['password_repeat']
+            if password == password_repeat:
+                try:
+                    self.user_.add_user(username, password)
+                except ValueError:
+                    raise
+            else:
+                raise ValueError(ERROR_PASSWORD_MSG)
+
+    def user_authenticated(self):
+        try:
+            username = cherrypy.session['username']
+        except:
+            raise ValueError(ERROR_LOGIN_MSG)
+
+        try:
+            self.user_.check_username(username)
+        except ValueError:
+            cherrypy.session['username'] = None
+            raise
+
+        return username
 
 class Users(object):
 
