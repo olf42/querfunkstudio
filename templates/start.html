@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+Index
+{% endblock %}
+
+
+{% block content %}
+	<hr>
+		{% if infoblock %}
+		
+		<p>{{	infoblock.text }}</p>
+
+		<hr>
+		{% endif %}
+		<div class="row">
+			<div class="col-md-2"></div>
+				<div class="col-md-8">
+					<h2>Logged in as {{username}}!</h2>
+					<p><a href="/start2">Proceed to Start2</a></p>
+					<p><a href="/logout" class="btn btn-default">Logout</a></a></p>
+				</div>
+			<div class="col-md-2"></div>
+		</div>
+	<hr>
+
+{% endblock %}
+

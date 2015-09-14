@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}
+Index
+{% endblock %}
+
+{% block error %}
+	{% if error %}
+	<hr>
+		<div class="alert alert-dismissible alert-danger">
+			<p><strong>Error: </strong>{{ error }}</p>
+		</div>
+	{% endif %}
+{% endblock %}
+
+{% block success %}
+	{% if success %}
+	<hr>
+		<div class="alert alert-dismissible alert-success">
+			<p><strong>Success: </strong>{{ success }}</p>
+		</div>
+	{% endif %}
+{% endblock %}
+
+
+{% block content %}
+	<hr>
+		{% if infoblock %}
+		
+		<p>{{	infoblock.text }}</p>
+
+		<hr>
+		{% endif %}
+		<div class="row">
+			<div class="col-md-2"></div>
+				<div class="col-md-3">
+					<form class="form-horizontal" method="POST" action="/start">
+					<fieldset>
+						<input class="form-control" name="query" value="login" type="hidden">
+						<legend>
+							Login
+						</legend>
+					<div class="form-group">
+						<input class="form-control" name="username" placeholder="Username" type="text" autofocus>
+					</div>
+					<div class="form-group">
+						<input class="form-control" name="password" placeholder="Password" type="password">
+					</div>
+					<div class="form-group">
+						<input type="submit" value="Login" class="btn btn-primary" >
+					</div>
+					</fieldset>
+					</form>
+				</div>
+				<div class="col-md-2">
+				</div>
+				<div class="col-md-3">
+					<form class="form-horizontal" method="POST" action="/register">
+					<fieldset>
+						<input class="form-control" name="query" value="register" type="hidden">
+						<legend>
+							Register Account
+						</legend>
+					<div class="form-group">
+					<input class="form-control" name="username" placeholder="Username" type="text" >
+					</div>
+					<div class="form-group">
+					<input class="form-control" name="password" placeholder="Password" type="password">
+					</div>
+					<div class="form-group">
+					<input class="form-control" name="password_repeat" placeholder="Password Repetition" type="password">
+					</div>
+					<div class="form-group">
+					<input type="submit" value="Register" class="btn btn-primary" >
+					</div>
+					</fieldset>
+					</form>
+				</div>
+			<div class="col-md-2"></div>
+		</div>
+	<hr>
+
+{% endblock %}
+
