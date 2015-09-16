@@ -4,32 +4,7 @@
 Index
 {% endblock %}
 
-{% block error %}
-	{% if error %}
-		<div class="alert alert-dismissible alert-danger">
-			<button type="button" class="close" data-dismiss="alert">×</button>
-			<p><strong>Error: </strong>{{ error }}</p>
-		</div>
-	{% endif %}
-{% endblock %}
-
-{% block success %}
-	{% if success %}
-		<div class="alert alert-dismissible alert-success">
-			<button type="button" class="close" data-dismiss="alert">×</button>
-			<p><strong>Success: </strong>{{ success }}</p>
-		</div>
-	{% endif %}
-{% endblock %}
-
-
 {% block content %}
-		{% if infoblock %}
-		
-		<p>{{	infoblock.text }}</p>
-
-		<hr>
-		{% endif %}
 		<div class="row">
 			<div class="col-md-2"></div>
 				<div class="col-md-3">

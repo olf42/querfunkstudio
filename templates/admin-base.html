@@ -4,25 +4,6 @@
 Admin
 {% endblock %}
 
-{% block error %}
-	{% if error %}
-		<div class="alert alert-dismissible alert-danger">
-			<button type="button" class="close" data-dismiss="alert">×</button>
-			<p><strong>Error: </strong>{{ error }}</p>
-		</div>
-	{% endif %}
-{% endblock %}
-
-{% block success %}
-	{% if success %}
-		<div class="alert alert-dismissible alert-success">
-			<button type="button" class="close" data-dismiss="alert">×</button>
-			<p><strong>Success: </strong>{{ success }}</p>
-		</div>
-	{% endif %}
-{% endblock %}
-
-
 
 {% block navbar %}
 		<div class="row">
@@ -46,9 +27,9 @@ Admin
 				<li><a href="/admin/schedules">Schedules</a></li>
 				<li><a href="/admin/users">Users</a></li>
 				<li><a href="/admin/log">Log</a></li>
-				<li><a href="/start">Start</a></li>
 			        </ul>
       				<ul class="nav navbar-nav navbar-right">
+				<li><a href="/start">Start</a></li>
 				<li><a href="/logout">Logout</a></li>
       				</ul>
 				</div>
