@@ -39,6 +39,15 @@ class Querfunkadmin(object):
         except ValueError as e:
             raise
 
+    @cherrypy.expose(['import'])
+    def schedules(self, **kwargs):
+        error=''
+        try:
+            schedule_list = self.backend_.get_schedules()
+        except ValueError as e:
+            return self.env.get_template('schedules.html').render(error=e)
+        return self.env.get_template('schedules.html').render(schedules=schedule_list)
+
 
     @cherrypy.expose(['import'])
     def import_schedule(self, **kwargs):

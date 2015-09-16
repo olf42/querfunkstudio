@@ -19,6 +19,7 @@ ERROR_USERCREATE_MSG = "User already exists! Choose a different Name and try aga
 ERROR_PASSWORD_MSG = "Passwords don't match. Try again!"
 ERROR_NOTSUPERUSER_MSG = "User is not superuser!"
 ERROR_STATIONXMLIMPORT_MSG = "Import not possible. Maybe the alias already exists?"
+ERROR_NOSCHEDULESFOUND_MSG = "No Schedules found."
 
 SUCCESS_STATIONXMLIMPORT_MSG = "Added {0} successfully."
 SUCCESS_REGISTRATION_MSG = "Account created. Needs approval."

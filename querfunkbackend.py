@@ -18,6 +18,13 @@ class Querfunkbackend(object):
         except ValueError:
             raise
 
+    def get_schedules(self):
+        schedules = self.backend_.get_schedules()
+        if schedules:
+            return schedules
+        else:
+            raise ValueError(ERROR_NOSCHEDULESFOUND_MSG)
+
 class Backend(object):
 
     def create_db(self):
@@ -39,5 +46,16 @@ class Backend(object):
                            content))
             except ValueError as e:
                 raise ValueError(ERROR_STATIONXMLIMPORT_MSG + e)
-            return SUCCESS_STATIONXMLIMPORT_MSG.format(alias)
+        return SUCCESS_STATIONXMLIMPORT_MSG.format(alias)
+
+    def get_schedules(self):
+        result = []
+        keys = ['id', 'alias']
+        with sqlite3.connect(DATABASE) as c:
+            self.schedules = c.execute(''' SELECT id,alias
+                                                  FROM stationxml''')
+            for item in self.schedules.fetchall():
+                result.append(dict(zip(keys, list(item))))
+        return result
+
 
