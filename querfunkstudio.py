@@ -44,18 +44,18 @@ class Querfunkstudio(object):
 
     @cherrypy.expose
     def start(self, **kwargs):
+        try:
+            user = self.user_.user_authenticated()
+        except ValueError as e:
+            return self.env.get_template('index.html').render(error=e)
+
         if len(kwargs)>0:
             try:
                 self.user_.process_request(kwargs)
             except ValueError as e:
                 return self.env.get_template('index.html').render(error=e)
 
-        try:
-            user = self.user_.user_authenticated()
-        except ValueError as e:
-            return self.env.get_template('index.html').render(error=e)
-
-        superuser = False
+                superuser = False
         try:
             superuser = self.user_.superuser_authenticated()
         except:
