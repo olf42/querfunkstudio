@@ -6,8 +6,8 @@ Index
 
 {% block error %}
 	{% if error %}
-	<hr>
 		<div class="alert alert-dismissible alert-danger">
+			<button type="button" class="close" data-dismiss="alert">×</button>
 			<p><strong>Error: </strong>{{ error }}</p>
 		</div>
 	{% endif %}
@@ -15,8 +15,8 @@ Index
 
 {% block success %}
 	{% if success %}
-	<hr>
 		<div class="alert alert-dismissible alert-success">
+			<button type="button" class="close" data-dismiss="alert">×</button>
 			<p><strong>Success: </strong>{{ success }}</p>
 		</div>
 	{% endif %}
@@ -24,7 +24,6 @@ Index
 
 
 {% block content %}
-	<hr>
 		{% if infoblock %}
 		
 		<p>{{	infoblock.text }}</p>

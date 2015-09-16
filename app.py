@@ -9,6 +9,7 @@ from querfunkuser import *
 from querfunktools import *
 from querfunkstudio import *
 from querfunkadmin import *
+from querfunkbackend import *
 
 if __name__ == '__main__':
 
@@ -18,8 +19,10 @@ if __name__ == '__main__':
     # Test Data
     if not os.path.isfile(DATABASE):
         users_ = Users()
-
         users_.create_db()
+
+        backend_ = Backend()
+        backend_.create_db()
 
         users_.add_user(username="Thorsten",
                        password="Password",
@@ -43,12 +46,16 @@ if __name__ == '__main__':
             '/': {'tools.staticdir.on': True,
                   'tools.staticdir.dir': os.path.join(current_dir, 'public'),
                   'tools.sessions.on': True,
+                  'tools.sessions.storage_type' : "file",
+                  'tools.sessions.storage_path' : os.path.join(current_dir, "sessions")
                   }
     })
     cherrypy.tree.mount(Querfunkadmin(env), "/admin", {
             '/': {'tools.staticdir.on': True,
                   'tools.staticdir.dir': os.path.join(current_dir, 'public'),
                   'tools.sessions.on': True,
+                  'tools.sessions.storage_type' : "file",
+                  'tools.sessions.storage_path' : os.path.join(current_dir, "sessions")
                   }
     })
 

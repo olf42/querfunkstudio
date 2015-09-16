@@ -1,0 +1,44 @@
+{% extends "admin-base.html" %}
+
+{% block title %}
+Import
+{% endblock %}
+
+{% block admincontent %}
+		
+		<div class="row">
+			<div class="col-md-2"></div>
+				<div class="col-md-4">
+					<form method="POST" action="/admin/import" enctype="multipart/form-data">
+					<fieldset>
+						<input class="form-control" name="query" value="import" type="hidden">
+						<legend>
+							Import
+						</legend>
+					<div class="form-group">
+						<input class="file" name="stationxml" type="file">
+					</div>
+					<div class="form-group">
+						<input class="form-control" name="alias" placeholder="Alias z.B. Sep-Dez-15" type="text" autofocus>
+					</div>
+					<div class="form-group">
+						<input type="submit" value="Upload" class="btn btn-primary" >
+					</div>
+					</fieldset>
+					</form>
+				</div>
+				<div class="col-md-4">
+					<h2>Import a File</h2>
+					<p class='lead'>Supports StationXML</p>
+					<p>Select a file which contains the stationxml code
+					of the schedule you want to import. Hit the "Upload"-
+					Button, and select an Alias-Name for the schedule, 
+					under which you recognize it.
+					</p>
+				</div>
+			<div class="col-md-2"></div>
+		</div>
+	<hr>
+
+{% endblock %}
+

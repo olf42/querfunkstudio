@@ -18,5 +18,7 @@ ERROR_SESSION_MSG = "No Username found in your Session. Please log in."
 ERROR_USERCREATE_MSG = "User already exists! Choose a different Name and try again."
 ERROR_PASSWORD_MSG = "Passwords don't match. Try again!"
 ERROR_NOTSUPERUSER_MSG = "User is not superuser!"
+ERROR_STATIONXMLIMPORT_MSG = "Import not possible. Maybe the alias already exists?"
 
+SUCCESS_STATIONXMLIMPORT_MSG = "Added {0} successfully."
 SUCCESS_REGISTRATION_MSG = "Account created. Needs approval."

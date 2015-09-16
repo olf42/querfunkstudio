@@ -30,14 +30,20 @@
 		</div>
 		<div class="col-md-6"></div>
 	</div><!-- /.row -->
-	
-	{% block error %}
-	{% endblock %}
 
+	<hr>
 
-	{% block success %}
-	{% endblock %}
+	<div class="row">
+		<div class="col-md-2"></div>
+		<div class="col-md-8">
+			{% block error %}
+			{% endblock %}
 
+			{% block success %}
+			{% endblock %}
+		</div>
+		<div class="col-md-2"></div>
+	</div>
 
 	{% block content %}
 	{% endblock %}

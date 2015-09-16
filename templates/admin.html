@@ -1,35 +1,11 @@
-{% extends "base.html" %}
+{% extends "admin-base.html" %}
 
 {% block title %}
 Admin
 {% endblock %}
 
 
-{% block content %}
-	<hr>
-		{% if infoblock %}
-		
-		<p>{{	infoblock.text }}</p>
-
-		<hr>
-		{% endif %}
-
-		<div class="row">
-			<div class="col-md-2"></div>
-			<div class="col-md-8">
-				<p>
-				<a href="/start" class="btn btn-default">Start</a>
-				<a href="/admin/import" class="btn btn-default">Import</a>
-				<a href="/admin/users" class="btn btn-default">Users</a>
-				<a href="/admin/log" class="btn btn-default">Log</a>
-				<a href="/logout" class="btn btn-danger">Logout</a>
-			</div>
-			<div class="col-md-2"></div>
-		</div>
-		<hr>
-
-		
-		
+{% block admincontent %}
 		<div class="row">
 			<div class="col-md-2"></div>
 				<div class="col-md-8">
