@@ -55,7 +55,8 @@ class Querfunkstudio(object):
             except ValueError as e:
                 return self.env.get_template('index.html').render(error=e)
 
-                superuser = False
+        superuser = False
+
         try:
             superuser = self.user_.superuser_authenticated()
         except:
