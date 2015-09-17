@@ -11,11 +11,26 @@ Schedule {{ alias }}
 			<div class="col-md-2"></div>
 				<div class="col-md-8">
 					<h2>Schedule {{ schedule.alias }}</h2>
+					<ul class="nav nav-tabs">
 					{% for week, weekcontent in schedule.content.items() %}
-						<h3>Week {{ week }}</h3>
+						<li class="{% if week == 1 %}active{% endif %}"><a href="#week-{{week}}" data-toggle="tab">Week {{week}}</a></li>
+					{% endfor %}
+					</ul>
+					<hr>
+					<div id="schedule-content" class="tab-content">
+					
+					{% for week, weekcontent in schedule.content.items() %}
+					<div class="tab-pane fade {% if week == 1%}active in{% endif %}" id="week-{{week}}">
+							<ul class="nav nav-tabs">
 							{% for day, daycontent in weekcontent.items() %}
-							<h4>{{ weekdays[day] }} of week {{ week }}</h4>
-							<table class="table table-striped table-hover">
+							<li class="{% if day == 1%}active{% endif %}"><a href="#{{week}}-{{day}}" data-toggle="tab">{{weekdays[day]}}</a></li>
+							{% endfor %}
+							</ul>
+							<hr>
+							<div id="{{week}}-content" class="tab-content">
+							{% for day, daycontent in weekcontent.items() %}
+							<div class="tab-pane fade {% if day == 1%}active in{% endif %}" id="{{week}}-{{day}}">
+								<table class="table table-striped table-hover">
 								<thead>
 									<tr>
 										<th>Time</th>
@@ -35,9 +50,13 @@ Schedule {{ alias }}
 								{% endif %}
 								{% endfor %}
 							</table>
-						{% endfor %}
+							</div>
+							{% endfor %}
+							</div>
 						<hr>
+					</div>
 					{% endfor %}
+					</div>
 					<a href="/admin/generate?id={{ schedule.id}}" class="btn btn-primary">Generate Calendar</a>
 				</div>
 			<div class="col-md-2"></div>
