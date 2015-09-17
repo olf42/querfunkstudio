@@ -32,7 +32,10 @@
 	</div><!-- /.row -->
 
 	<hr>
-	
+
+	{% block navbar %}
+	{% endblock %}
+		
 	<div class="row">
 		<div class="col-md-2"></div>
 		<div class="col-md-8">
@@ -57,9 +60,6 @@
 		<div class="col-md-2"></div>
 	</div>
 
-	{% block navbar %}
-	{% endblock %}
-	
 	{% block content %}
 	{% endblock %}
 
