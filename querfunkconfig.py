@@ -19,7 +19,15 @@ WEEKDAYS =   { "Mo" : 1,
                "Do" : 4,
                "Fr" : 5,
                "Sa" : 6,
-               "So" : 7,}
+               "So" : 7,
+               1: "Monday",
+               2: "Tuesday",
+               3: "Wednesday",
+               4: "Thursday",
+               5: "Friday",
+               6: "Saturday",
+               7: "Sunday",
+               }
 
 
 ERROR_LOGIN_MSG = "Username not found, Password mismatch or user not active"

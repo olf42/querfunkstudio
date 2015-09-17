@@ -35,7 +35,8 @@ class Querfunkbackend(object):
 
         querfunk = ScheduleView()
         querfunk.import_stationxml(schedule)
-        return dict(zip(keys, [alias, self.schedule_id, querfunk.show_schedule()]))
+        return dict(zip(keys, [alias, self.schedule_id, querfunk.get_schedule()]))
+        #return dict(zip(keys, [alias, self.schedule_id, querfunk.show_schedule()]))
 
     def get_schedules(self):
         schedules = self.backend_.get_schedules()

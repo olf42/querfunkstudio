@@ -10,10 +10,34 @@ Schedule {{ alias }}
 		<div class="row">
 			<div class="col-md-2"></div>
 				<div class="col-md-8">
-					<h2>Schedule {{ schedule.alias }} ({{ schedule.id }})</h2>
-					<pre>
-					{{ schedule.content }}
-					</pre>
+					<h2>Schedule {{ schedule.alias }}</h2>
+					{% for week, weekcontent in schedule.content.items() %}
+						<h3>Week {{ week }}</h3>
+							{% for day, daycontent in weekcontent.items() %}
+							<h4>{{ weekdays[day] }} of week {{ week }}</h4>
+							<table class="table table-striped table-hover">
+								<thead>
+									<tr>
+										<th>Time</th>
+										<th>Length</th>
+										<th>ID</th>
+										<th>Name</th>
+									</tr>
+								</thead>
+								{% for hour, hourcontent in daycontent.items() %}
+								{% if hourcontent %}
+								<tr>
+									<th>{{ hour}}:00</th>
+									<td>{{hourcontent.length}}</td>
+									<td>{{hourcontent.id}}</td>
+									<td>{{hourcontent.name}}</td>
+								</tr>
+								{% endif %}
+								{% endfor %}
+							</table>
+						{% endfor %}
+						<hr>
+					{% endfor %}
 					<a href="/admin/generate?id={{ schedule.id}}" class="btn btn-primary">Generate Calendar</a>
 				</div>
 			<div class="col-md-2"></div>

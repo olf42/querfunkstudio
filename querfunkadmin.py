@@ -85,7 +85,8 @@ class Querfunkadmin(object):
                 error=e
 
         return self.env.get_template('schedule.html').render(schedule=schedule,
-                                                           error=error
+                                                           error=error,
+                                                           weekdays=WEEKDAYS,
                                                           )
 
     @cherrypy.expose

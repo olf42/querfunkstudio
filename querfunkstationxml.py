@@ -48,23 +48,27 @@ class Schedule(object):
 
     def set_schedule(self, stationxmltree):
         for broadcast in stationxmltree.findall("broadcast"):
+            broadcast_id = broadcast.attrib['id']
             sxml_info = broadcast.find("info")
             broadcast_name = sxml_info.find("name").text
             self.sxml_transmission = broadcast.find("transmissions")
-            self.parse_shows(broadcast_name, "live")
+            self.parse_shows(broadcast_name, broadcast_id, "live")
             try:
-                self.parse_shows(broadcast_name, "repeat")
+                self.parse_shows(broadcast_name, broadcast_id, "repeat")
             except:
                 pass
 
-    def parse_shows(self, name, keyword):
+    def parse_shows(self, name, b_id, keyword):
         for key in self.sxml_transmission.findall(keyword):
             week = int(key.find("week").text)
             day  = WEEKDAYS[key.find("day").text]
             time = int(key.find("starttime").text[:2])
             length = key.find("length").text
             try:
-                self.add_show(int(week), day, time, {"length":length, "name":name, "live":keyword})
+                self.add_show(int(week), day, time, {"id": b_id,
+                                                     "length":length,
+                                                     "name":name,
+                                                     "live":keyword})
             except ValueError:
                 print("StationXML-File contains duplicates:")
                 print("Tried to add {3} in Week {0} on Day {1} at {2}:00".format(week,
@@ -104,10 +108,11 @@ class ScheduleView(object):
                     info = self.schedule.get_slot(i,j,k)
                     if (info == {}):
                         continue
-                    result += "{0}:00 Uhr\t{2}\t{3}\t{1}<br>".format(k,
+                    result += "{0}:00 Uhr\t{2}\t{3}\t{4} - {1}<br>".format(k,
                                                                  info["name"],
                                                                  info["length"],
-                                                                 info["live"])
+                                                                 info["live"],
+                                                                 info["id"])
                 result += "----------------------------------------<br>"
             result += "--------------------------------------------------------------------------------<br>"
         return result
