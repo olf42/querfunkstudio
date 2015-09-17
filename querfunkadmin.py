@@ -65,6 +65,26 @@ class Querfunkadmin(object):
             except ValueError as e:
                 error=e
         return self.env.get_template('import.html').render(success=success,
+                                                           error=error)
+
+
+    @cherrypy.expose
+    def schedule(self, **kwargs):
+        error = str()
+        schedule = dict()
+
+        try:
+            user = self.user_.superuser_authenticated()
+        except ValueError as e:
+            return self.env.get_template('index.html').render(error=e)
+
+        if len(kwargs)>0:
+            try:
+                schedule = self.backend_.get_schedule(kwargs)
+            except ValueError as e:
+                error=e
+
+        return self.env.get_template('schedule.html').render(schedule=schedule,
                                                            error=error
                                                           )
 

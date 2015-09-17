@@ -6,6 +6,7 @@ import os.path
 from querfunkconfig import *
 from querfunkuser import *
 from querfunktools import *
+from querfunkstationxml import *
 
 class Querfunkbackend(object):
 
@@ -17,6 +18,24 @@ class Querfunkbackend(object):
             return self.backend_.add_stationxml(content, alias)
         except ValueError:
             raise
+
+    def get_schedule(self, kwargs):
+        keys = ['alias', 'id', 'content']
+        try:
+            self.schedule_id = kwargs['id']
+        except:
+            raise ValueError(ERROR_SCHEDULENOTFOUND_MSG)
+
+        try:
+            schedule = self.backend_.get_schedule(self.schedule_id)
+            alias = schedule[0][1]
+            schedule = schedule[0][0]
+        except:
+            raise ValueError(ERROR_SCHEDULENOTFOUND_MSG)
+
+        querfunk = ScheduleView()
+        querfunk.import_stationxml(schedule)
+        return dict(zip(keys, [alias, self.schedule_id, querfunk.show_schedule()]))
 
     def get_schedules(self):
         schedules = self.backend_.get_schedules()
@@ -39,14 +58,22 @@ class Backend(object):
         with sqlite3.connect(DATABASE) as c:
             try:
                 c.execute(''' INSERT INTO 
-                          stationxml(alias, 
-                                stationxml) 
-                          VALUES (?, ?) ''',
+                              stationxml(alias, 
+                                         stationxml) 
+                              VALUES (?, ?) ''',
                           (alias,
                            content))
             except ValueError as e:
                 raise ValueError(ERROR_STATIONXMLIMPORT_MSG + e)
         return SUCCESS_STATIONXMLIMPORT_MSG.format(alias)
+
+    def get_schedule(self, schedule_id):
+        with sqlite3.connect(DATABASE) as c:
+            result = c.execute(''' SELECT stationxml, alias
+                                   FROM stationxml
+                                   WHERE id=?''',
+                                   (schedule_id,))
+        return result.fetchall()
 
     def get_schedules(self):
         result = []

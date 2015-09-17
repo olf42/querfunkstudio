@@ -1,0 +1,25 @@
+{% extends "admin-base.html" %}
+
+{% block title %}
+Schedule {{ alias }}
+{% endblock %}
+
+
+{% block content %}
+		{% if schedule %}
+		<div class="row">
+			<div class="col-md-2"></div>
+				<div class="col-md-8">
+					<h2>Schedule {{ schedule.alias }} ({{ schedule.id }})</h2>
+					<pre>
+					{{ schedule.content }}
+					</pre>
+					<a href="/admin/generate?id={{ schedule.id}}" class="btn btn-primary">Generate Calendar</a>
+				</div>
+			<div class="col-md-2"></div>
+		</div>
+		{% endif %}
+	<hr>
+
+{% endblock %}
+

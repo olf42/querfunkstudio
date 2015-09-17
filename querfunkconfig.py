@@ -13,6 +13,15 @@ LOG_DISPLAY = {0:"success",
                1:"warning",
                2:"danger"}
 
+WEEKDAYS =   { "Mo" : 1,
+               "Di" : 2,
+               "Mi" : 3,
+               "Do" : 4,
+               "Fr" : 5,
+               "Sa" : 6,
+               "So" : 7,}
+
+
 ERROR_LOGIN_MSG = "Username not found, Password mismatch or user not active"
 ERROR_SESSION_MSG = "No Username found in your Session. Please log in."
 ERROR_USERCREATE_MSG = "User already exists! Choose a different Name and try again."
@@ -20,6 +29,7 @@ ERROR_PASSWORD_MSG = "Passwords don't match. Try again!"
 ERROR_NOTSUPERUSER_MSG = "User is not superuser!"
 ERROR_STATIONXMLIMPORT_MSG = "Import not possible. Maybe the alias already exists?"
 ERROR_NOSCHEDULESFOUND_MSG = "No Schedules found."
+ERROR_SCHEDULENOTFOUND_MSG = "Schedule not found."
 
 SUCCESS_STATIONXMLIMPORT_MSG = "Added {0} successfully."
 SUCCESS_REGISTRATION_MSG = "Account created. Needs approval."
