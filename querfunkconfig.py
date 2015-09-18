@@ -38,6 +38,8 @@ ERROR_NOTSUPERUSER_MSG = "User is not superuser!"
 ERROR_STATIONXMLIMPORT_MSG = "Import not possible. Maybe the alias already exists?"
 ERROR_NOSCHEDULESFOUND_MSG = "No Schedules found."
 ERROR_SCHEDULENOTFOUND_MSG = "Schedule not found."
+ERROR_SHOWNOTFOUND_MSG = "Show not found."
+ERROR_ADDSHOW_MSG = "Show already exists!"
 
 SUCCESS_STATIONXMLIMPORT_MSG = "Added {0} successfully."
 SUCCESS_REGISTRATION_MSG = "Account created. Needs approval."

@@ -67,6 +67,27 @@ class Querfunkadmin(object):
         return self.env.get_template('import.html').render(success=success,
                                                            error=error)
 
+    @cherrypy.expose
+    def generate(self, **kwargs):
+        error = str()
+        shows = dict()
+        no_of_shows = 0
+        try:
+            user = self.user_.superuser_authenticated()
+        except ValueError as e:
+            return self.env.get_template('index.html').render(error=e)
+
+        if len(kwargs)>0:
+            try:
+                added_shows, existing_shows, no_of_shows = self.backend_.generate_calendar(kwargs['id'])
+            except ValueError as e:
+                error=e
+
+        return self.env.get_template('generate.html').render(added_shows=added_shows,
+                                                             existing_shows=existing_shows,
+                                                             no_of_shows=no_of_shows,
+                                                             error=error,
+                                                            )
 
     @cherrypy.expose
     def schedule(self, **kwargs):

@@ -1,0 +1,32 @@
+{% extends "admin-base.html" %}
+
+{% block title %}
+Admin
+{% endblock %}
+
+
+{% block content %}
+		<div class="row">
+			<div class="col-md-2"></div>
+				<div class="col-md-8">
+					<h2>Generating Calendar...</h2>
+					Found {{ no_of_shows }} shows.
+					{% if added_shows %}
+					<h3>Added new shows:</h3>
+					{% for show_id, show_name in added_shows.items() %}
+					{{ show_id }} - {{ show_name}}<br>
+					{% endfor %}
+					{% endif %}
+					{% if existing_shows %}
+					<h3>Existing shows:</h3>
+					{% for show_id, show_name in existing_shows.items() %}
+					{{ show_id }} - {{ show_name}}<br>
+					{% endfor %}
+					{% endif %}
+				</div>
+			<div class="col-md-2"></div>
+		</div>
+	<hr>
+
+{% endblock %}
+

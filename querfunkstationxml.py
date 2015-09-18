@@ -19,6 +19,7 @@ class Schedule(object):
                 self.schedule[i][j] = {}
                 for k in range(24):
                     self.schedule[i][j][k] = {}
+        self.shows = {}
 
     def add_show(self,week,day,time,data):
         if (self.schedule[week][day][time] == {}):
@@ -46,11 +47,18 @@ class Schedule(object):
     def get_slot(self,week,day,slot):
         return self.schedule[week][day][slot]
 
+    def add_show_to_list(self, b_id, b_name):
+        try:
+            self.shows[b_id]
+        except KeyError:
+            self.shows[b_id] = b_name
+
     def set_schedule(self, stationxmltree):
         for broadcast in stationxmltree.findall("broadcast"):
             broadcast_id = broadcast.attrib['id']
             sxml_info = broadcast.find("info")
             broadcast_name = sxml_info.find("name").text
+            self.add_show_to_list(broadcast_id, broadcast_name)
             self.sxml_transmission = broadcast.find("transmissions")
             self.parse_shows(broadcast_name, broadcast_id, "live")
             try:
@@ -76,10 +84,12 @@ class Schedule(object):
                                                                      time,
                                                                      name))
                 print("But this spot is already occupied by {0}".format(self.schedule[week][day][time]['name']))
-                sys.exit(1)
 
     def get_schedule(self):
         return self.schedule
+
+    def get_shows(self):
+        return self.shows
 
     def get_show(self, showname):
         result = []
@@ -100,31 +110,6 @@ class ScheduleView(object):
     def add_show(self,week, day, time, data):
         self.schedule.add_show(week, day, time, data)
 
-    def show_schedule(self):
-        result = ''
-        for i in range(1,6):
-            for j in range(1,8):
-                for k in range(24):
-                    info = self.schedule.get_slot(i,j,k)
-                    if (info == {}):
-                        continue
-                    result += "{0}:00 Uhr\t{2}\t{3}\t{4} - {1}<br>".format(k,
-                                                                 info["name"],
-                                                                 info["length"],
-                                                                 info["live"],
-                                                                 info["id"])
-                result += "----------------------------------------<br>"
-            result += "--------------------------------------------------------------------------------<br>"
-        return result
-
-    def show_days(self,day):
-        '''Return all days matching the given day-id'''
-        result = self.schedule.get_days(day)
-        for day in result:
-            for slot in day:
-                print("{0}:00 Uhr\t{1}".format(slot,day[slot]))
-            print("--------------------")
-
     def import_stationxml(self, content):
         sxml = ET.fromstring(content)
 
@@ -134,15 +119,8 @@ class ScheduleView(object):
         except NameError as e:
             print("Unexpected error:", e)
 
-    def show_show(self, showname):
-        result = self.schedule.get_show(showname)
-        for i in result:
-            print(i)
+    def get_shows(self):
+        return self.schedule.get_shows()
 
     def get_schedule(self):
         return self.schedule.get_schedule()
-
-if __name__ == "__main__":
-    querfunk = ScheduleView()
-    querfunk.import_stationxml(STATIONXML_FILENAME)
-    print(querfunk.show_schedule())

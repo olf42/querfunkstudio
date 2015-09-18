@@ -45,6 +45,24 @@ class Querfunkbackend(object):
         else:
             raise ValueError(ERROR_NOSCHEDULESFOUND_MSG)
 
+    def generate_calendar(self, schedule_id):
+        try:
+            schedule = self.backend_.get_schedule(schedule_id)[0][0]
+        except:
+            raise ValueError(ERROR_SCHEDULENOTFOUND_MSG)
+        querfunk = ScheduleView()
+        querfunk.import_stationxml(schedule)
+        shows = querfunk.get_shows()
+        existing_shows = dict()
+        added_shows = dict()
+        for show_id, show_name in shows.items():
+            try:
+                self.backend_.add_show(show_id, show_name)
+                added_shows[show_id] = show_name
+            except:
+                existing_shows[show_id] = show_name
+        return added_shows, existing_shows, len(shows)
+
 class Backend(object):
 
     def create_db(self):
@@ -54,6 +72,45 @@ class Backend(object):
                           stationxml(id INTEGER PRIMARY KEY,
                                 stationxml TEXT,
                                 alias TEXT) ''')
+            c.execute(''' CREATE TABLE 
+                          IF NOT EXISTS 
+                          shows(id INTEGER PRIMARY KEY,
+                                name TEXT,
+                                description TEXT) ''')
+            c.execute(''' CREATE TABLE 
+                          IF NOT EXISTS 
+                          show_user(id INTEGER PRIMARY KEY,
+                                    show_id INTEGER,
+                                    username TEXT,
+                                    FOREIGN KEY(show_id) REFERENCES shows(id),
+                                    FOREIGN KEY(username) REFERENCES users(username)
+                                    )''')
+
+    def get_show(self, show_id):
+        with sqlite3.connect(DATABASE) as c:
+            result = c.execute(''' SELECT name, description
+                                   FROM shows
+                                   WHERE id=?''',
+                                   (show_id,))
+        try:
+            return list(result.fetchall()[0])
+        except:
+            raise ValueError(ERROR_SHOWNOTFOUND_MSG)
+
+    def add_show(self, show_id, name, description=''):
+        with sqlite3.connect(DATABASE) as c:
+            try:
+                c.execute(''' INSERT INTO 
+                              shows(id,
+                                    name, 
+                                    description) 
+                              VALUES (?, ?, ?) ''',
+                          (show_id,
+                           name,
+                           description))
+            except ValueError:
+                raise ValueError(ERROR_ADDSHOW_MSG)
+
 
     def add_stationxml(self, content, alias):
         with sqlite3.connect(DATABASE) as c:
@@ -64,8 +121,8 @@ class Backend(object):
                               VALUES (?, ?) ''',
                           (alias,
                            content))
-            except ValueError as e:
-                raise ValueError(ERROR_STATIONXMLIMPORT_MSG + e)
+            except ValueError:
+                raise ValueError(ERROR_STATIONXMLIMPORT_MSG)
         return SUCCESS_STATIONXMLIMPORT_MSG.format(alias)
 
     def get_schedule(self, schedule_id):
