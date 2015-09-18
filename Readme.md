@@ -22,8 +22,8 @@ Right now, the project is in a very early stage of development, apart from very 
 ## Roadmap
 
 * until 12/2015: Implementation of all basic features
-* until 02/2015: Test at Querfunk (non-commercial radio station in Karlsruhe)
-* until 03/2015: Production use of this software at Querfunk
+* until 02/2016: Test at Querfunk (non-commercial radio station in Karlsruhe)
+* until 03/2016: Production use of this software at Querfunk
 
 ## Feedback / Bugs / Requests
 
