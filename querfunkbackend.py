@@ -12,6 +12,7 @@ class Querfunkbackend(object):
 
     def __init__(self):
         self.backend_ = Backend()
+        self.users_ = Users()
 
     def import_stationxml(self, content, alias):
         try:
@@ -69,6 +70,20 @@ class Querfunkbackend(object):
             return shows
         else:
             raise ValueError(ERROR_NOSHOWSFOUND_MSG)
+
+    def get_users(self):
+        users = self.users_.get_users()
+        if users:
+            return users
+        else:
+            raise ValueError(ERROR_NOUSERSFOUND_MSG)
+
+    def get_superusers(self):
+        users = self.users_.get_superusers()
+        if users:
+            return users
+        else:
+            raise ValueError(ERROR_NOUSERSFOUND_MSG)
 
 class Backend(object):
 

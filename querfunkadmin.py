@@ -111,6 +111,14 @@ class Querfunkadmin(object):
                                                           )
 
     @cherrypy.expose
+    def users(self):
+        users = self.backend_.get_users()
+        superusers = self.backend_.get_superusers()
+        return self.env.get_template('users.html').render(users=users,
+                                                          superusers=superusers)
+
+
+    @cherrypy.expose
     def shows(self):
         shows = self.backend_.get_shows()
         return self.env.get_template('shows.html').render(shows=shows)
