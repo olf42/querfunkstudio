@@ -1,0 +1,41 @@
+{% extends "admin-base.html" %}
+
+{% block title %}
+Shows
+{% endblock %}
+
+{% block content %}
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-8">
+			<h2>Shows</h2>
+			{% if shows %}
+			<table class="table table-striped table-hover ">
+                                        <thead>
+						<th>ID</th>
+                                                <th>Name</th>
+                                                <th>Details</th>
+                                        </thead>
+					{% for show in shows %}
+					<tr>
+						<td>
+							{{ show.id }}
+						</td>
+						<td>
+							{{ show.name }}
+						</td>
+						<td>
+							<a href="/admin/show?{{ show.id }}">Details</a>
+						</td>
+					</tr>	
+				{% endfor %}
+			</table>	
+			{% endif %}
+			</div>
+			<div class="col-md-2"></div>
+		</div><!-- /.row -->
+	<hr>
+
+{% endblock %}
+
+

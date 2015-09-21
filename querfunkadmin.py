@@ -111,9 +111,9 @@ class Querfunkadmin(object):
                                                           )
 
     @cherrypy.expose
-    def items(self):
-        items = self.backend_.get_items()
-        return self.env.get_template('items.html').render(items=items)
+    def shows(self):
+        shows = self.backend_.get_shows()
+        return self.env.get_template('shows.html').render(shows=shows)
 
     @cherrypy.expose
     def log(self):

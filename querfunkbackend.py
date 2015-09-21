@@ -63,11 +63,18 @@ class Querfunkbackend(object):
                 existing_shows[show_id] = show_name
         return added_shows, existing_shows, len(shows)
 
+    def get_shows(self):
+        shows = self.backend_.get_shows()
+        if shows:
+            return shows
+        else:
+            raise ValueError(ERROR_NOSHOWSFOUND_MSG)
+
 class Backend(object):
 
     def create_db(self):
         with sqlite3.connect(DATABASE) as c:
-            c.execute(''' CREATE TABLE 
+            c.execute(''' CREATE TABLE
                           IF NOT EXISTS 
                           stationxml(id INTEGER PRIMARY KEY,
                                 stationxml TEXT,
@@ -84,6 +91,17 @@ class Backend(object):
                                     username TEXT,
                                     FOREIGN KEY(show_id) REFERENCES shows(id),
                                     FOREIGN KEY(username) REFERENCES users(username)
+                                    )''')
+            c.execute(''' CREATE TABLE
+                          IF NOT EXISTS
+                          calendar(id INTEGER PRIMARY KEY,
+                                    year INTEGER,
+                                    month INTEGER,
+                                    day INTEGER,
+                                    hour INTEGER,
+                                    live INTEGER,
+                                    show_id INTEGER,
+                                    FOREIGN KEY(show_id) REFERENCES shows(id),
                                     )''')
 
     def get_show(self, show_id):
@@ -139,6 +157,17 @@ class Backend(object):
         with sqlite3.connect(DATABASE) as c:
             self.schedules = c.execute(''' SELECT id,alias
                                                   FROM stationxml''')
+            for item in self.schedules.fetchall():
+                result.append(dict(zip(keys, list(item))))
+        return result
+
+
+    def get_shows(self):
+        result = []
+        keys = ['id', 'name']
+        with sqlite3.connect(DATABASE) as c:
+            self.schedules = c.execute(''' SELECT id,name
+                                                  FROM shows''')
             for item in self.schedules.fetchall():
                 result.append(dict(zip(keys, list(item))))
         return result
