@@ -85,13 +85,33 @@ class Querfunkbackend(object):
         else:
             raise ValueError(ERROR_NOUSERSFOUND_MSG)
 
+    def get_userdata(self, username):
+        userkeys = ['name', 'password', 'active', 'superuser']
+        userdata = dict()
+
+        try:
+            userdata = self.users_.get_user(username)
+        except:
+            raise
+
+        return dict(zip(userkeys, userdata))
+
+    def get_user_shows(self, username):
+        try:
+            user_shows = self.backend_.get_user_shows(username)
+        except:
+            raise
+
+        return user_shows
+
+
 class Backend(object):
 
     def create_db(self):
         with sqlite3.connect(DATABASE) as c:
             c.execute(''' CREATE TABLE
                           IF NOT EXISTS 
-                          stationxml(id INTEGER PRIMARY KEY,
+                          stationxml(stationxml_id INTEGER PRIMARY KEY,
                                 stationxml TEXT,
                                 alias TEXT) ''')
             c.execute(''' CREATE TABLE 
@@ -101,23 +121,41 @@ class Backend(object):
                                 description TEXT) ''')
             c.execute(''' CREATE TABLE 
                           IF NOT EXISTS 
-                          show_user(id INTEGER PRIMARY KEY,
-                                    show_id INTEGER,
+                          show_user(show_user_id INTEGER PRIMARY KEY,
+                                    id INTEGER,
                                     username TEXT,
-                                    FOREIGN KEY(show_id) REFERENCES shows(id),
+                                    FOREIGN KEY(id) REFERENCES shows(id),
                                     FOREIGN KEY(username) REFERENCES users(username)
                                     )''')
             c.execute(''' CREATE TABLE
                           IF NOT EXISTS
-                          calendar(id INTEGER PRIMARY KEY,
+                          calendar(calendar_id INTEGER PRIMARY KEY,
                                     year INTEGER,
                                     month INTEGER,
                                     day INTEGER,
                                     hour INTEGER,
                                     live INTEGER,
-                                    show_id INTEGER,
-                                    FOREIGN KEY(show_id) REFERENCES shows(id),
+                                    id INTEGER,
+                                    stationxml_id INTEGER,
+                                    FOREIGN KEY(id) REFERENCES shows(id),
+                                    FOREIGN KEY(stationxml_id) REFERENCES stationxml(stationxml_id)
                                     )''')
+
+    def get_user_shows(self, username):
+        result = []
+        keys = ['show_name', 'show_id']
+        with sqlite3.connect(DATABASE) as c:
+            self.user_shows = c.execute('''SELECT shows.name, shows.id
+                                          FROM shows JOIN show_user using (id)
+                                          WHERE username=?''',
+                                          (username,))
+            try:
+                for item in self.user_shows.fetchall():
+                    result.append(dict(zip(keys, list(item))))
+                return result
+            except:
+                raise ValueError(ERROR_NOSHOWSFOUND_MSG)
+
 
     def get_show(self, show_id):
         with sqlite3.connect(DATABASE) as c:
@@ -162,7 +200,7 @@ class Backend(object):
         with sqlite3.connect(DATABASE) as c:
             result = c.execute(''' SELECT stationxml, alias
                                    FROM stationxml
-                                   WHERE id=?''',
+                                   WHERE stationxml_id=?''',
                                    (schedule_id,))
         return result.fetchall()
 
@@ -170,7 +208,7 @@ class Backend(object):
         result = []
         keys = ['id', 'alias']
         with sqlite3.connect(DATABASE) as c:
-            self.schedules = c.execute(''' SELECT id,alias
+            self.schedules = c.execute(''' SELECT stationxml_id,alias
                                                   FROM stationxml''')
             for item in self.schedules.fetchall():
                 result.append(dict(zip(keys, list(item))))

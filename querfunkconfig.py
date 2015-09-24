@@ -41,6 +41,7 @@ ERROR_SCHEDULENOTFOUND_MSG = "Schedule not found."
 ERROR_SHOWNOTFOUND_MSG = "Show not found."
 ERROR_ADDSHOW_MSG = "Show already exists!"
 ERROR_NOSHOWSFOUND_MSG = "No Shows found!"
+ERROR_USERNOTFOUND_MSG = "User not found!"
 
 SUCCESS_STATIONXMLIMPORT_MSG = "Added {0} successfully."
 SUCCESS_REGISTRATION_MSG = "Account created. Needs approval."

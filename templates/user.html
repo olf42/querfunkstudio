@@ -1,0 +1,60 @@
+{% extends "admin-base.html" %}
+
+{% block title %}
+{{ userdata.name }}
+{% endblock %}
+
+{% block content %}
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-4">
+			{% if userdata %}
+			<h2>{{userdata.name}}</h2>
+			<form method="POST" action="/admin/user">
+                                        <fieldset>
+                                                <input class="form-control" name="query" value="update" type="hidden">
+					<div class="form-group">
+						<label for="active" class="control-label">Active</label>
+					        <select class="form-control" id="active">
+						<option {% if not userdata.active %}selected{% endif %}>Inactive</option>
+						<option {% if userdata.active %}selected{% endif %}>Active</option>
+					        </select>
+                                        </div>
+					<div class="form-group">
+						<label for="superuser" class="control-label">Superuser</label>
+					        <select class="form-control" id="superuser">
+						<option {% if not userdata.superuser %}selected{% endif %}>Normal User</option>
+						<option {% if userdata.superuser %}selected{% endif %}>Superuser</option>
+					        </select>
+                                        </div>
+                                        <div class="form-group">
+						<label for="password" class="control-label">Password</label>
+						<input class="form-control" name="password" type="password">
+                                        </div>
+                                        <div class="form-group">
+						<input type="submit" value="Submit" class="btn btn-primary" >
+                                        </div>
+                                        </fieldset>
+                                        </form>
+			{% endif %}
+			</div>
+			<div class="col-md-4">
+			<h2>Shows</h2>
+			{% if not shows %}
+				<p>
+				{{ noshows }}
+				</p>
+			{% endif %}
+			<ul>
+				{% for show in shows %}
+					<li><a href="/admin/show?id={{ show.show_id }}">{{show.show_name}}</a></li>
+				{% endfor %}
+			</ul>
+			</div>
+			<div class="col-md-2"></div>
+		</div><!-- /.row -->
+	<hr>
+
+{% endblock %}
+
+

@@ -41,6 +41,12 @@ class Querfunkadmin(object):
 
     @cherrypy.expose(['import'])
     def schedules(self, **kwargs):
+
+        try:
+            user = self.user_.superuser_authenticated()
+        except ValueError as e:
+            return self.env.get_template('index.html').render(error=e)
+
         error=''
         try:
             schedule_list = self.backend_.get_schedules()
@@ -104,6 +110,8 @@ class Querfunkadmin(object):
                 schedule = self.backend_.get_schedule(kwargs)
             except ValueError as e:
                 error=e
+        else:
+            error = ERROR_SCHEDULENOTFOUND_MSG
 
         return self.env.get_template('schedule.html').render(schedule=schedule,
                                                            error=error,
@@ -112,19 +120,67 @@ class Querfunkadmin(object):
 
     @cherrypy.expose
     def users(self):
+
+        try:
+            user = self.user_.superuser_authenticated()
+        except ValueError as e:
+            return self.env.get_template('index.html').render(error=e)
+
         users = self.backend_.get_users()
         superusers = self.backend_.get_superusers()
         return self.env.get_template('users.html').render(users=users,
                                                           superusers=superusers)
 
+    @cherrypy.expose
+    def user(self, **kwargs):
+
+        noshows = ERROR_NOSHOWSFOUND_MSG
+        shows = []
+
+        try:
+            user = self.user_.superuser_authenticated()
+        except ValueError as e:
+            return self.env.get_template('index.html').render(error=e)
+
+        if len(kwargs)>0:
+            try:
+                userdata = self.backend_.get_userdata(kwargs['name'])
+            except ValueError as e:
+                error=e
+
+        shows = self.backend_.get_user_shows(kwargs['name'])
+
+        print(shows)
+        return self.env.get_template('user.html').render(userdata=userdata,
+                                                        shows=shows,
+                                                        noshows=noshows)
+
 
     @cherrypy.expose
     def shows(self):
-        shows = self.backend_.get_shows()
-        return self.env.get_template('shows.html').render(shows=shows)
+
+        error = str()
+        shows = []
+
+        try:
+            user = self.user_.superuser_authenticated()
+        except ValueError as e:
+            return self.env.get_template('index.html').render(error=e)
+
+        try:
+            shows = self.backend_.get_shows()
+        except ValueError as e:
+            error=e
+        return self.env.get_template('shows.html').render(shows=shows,error=error)
 
     @cherrypy.expose
     def log(self):
+
+        try:
+            user = self.user_.superuser_authenticated()
+        except ValueError as e:
+            return self.env.get_template('index.html').render(error=e)
+
         logs = self.backend_.get_log()
         for message in logs:
             message['type'] = LOG_DISPLAY[message['type']]

@@ -126,6 +126,18 @@ class Users(object):
                           (username,))
         return user.fetchall()
 
+    def get_user(self, username):
+        result = None
+        with sqlite3.connect(DATABASE) as c:
+            user = c.execute(''' SELECT *
+                                 FROM users
+                                 WHERE username = ?''',
+                                 (username,))
+        try:
+            return user.fetchall()[0]
+        except:
+            raise ValueError(ERROR_USERNOTFOUND_MSG)
+
     def get_users(self):
         with sqlite3.connect(DATABASE) as c:
             self.users = c.execute(''' SELECT username,password

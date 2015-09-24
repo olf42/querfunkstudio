@@ -7,7 +7,7 @@ Users
 {% block content %}
 		<div class="row">
 			<div class="col-md-2"></div>
-			<div class="col-md-8">
+			<div class="col-md-4">
 			<h2>Users</h2>
 			{% if users %}
 			<table class="table table-striped table-hover ">
@@ -21,14 +21,16 @@ Users
 							{{ user }}
 						</td>
 						<td>
-							<a href="/admin/user?{{ user }}">Details</a>
+							<a href="/admin/user?name={{ user }}">Details</a>
 						</td>
 					</tr>	
 				{% endfor %}
 			</table>	
 			{% endif %}
+			</div>
+			<div class="col-md-4">
 			<h2>Superusers</h2>
-			{% if users %}
+			{% if superusers %}
 			<table class="table table-striped table-hover ">
                                         <thead>
                                                 <th>Name</th>
@@ -40,7 +42,7 @@ Users
 							{{ user }}
 						</td>
 						<td>
-							<a href="/admin/user?{{ user }}">Details</a>
+							<a href="/admin/user?name={{ user }}">Details</a>
 						</td>
 					</tr>	
 				{% endfor %}
