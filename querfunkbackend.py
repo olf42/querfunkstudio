@@ -156,6 +156,12 @@ class Querfunkbackend(object):
 
         return SUCCESS_UPDATEUSER_MSG
 
+        def write_log(self, message, logtype=0):
+            self.backend_.write_log(message, logtype)
+
+        def get_log(self):
+            return self.backend_.get_log()
+
 class Backend(object):
 
     def create_db(self):
@@ -191,6 +197,15 @@ class Backend(object):
                                     FOREIGN KEY(id) REFERENCES shows(id),
                                     FOREIGN KEY(stationxml_id) REFERENCES stationxml(stationxml_id)
                                     )''')
+            c.execute(''' CREATE TABLE 
+                          IF NOT EXISTS 
+                          log(id INTEGER PRIMARY KEY,
+                                datetime TEXT,
+                                message TEXT,
+                                type INTEGER
+                                ) ''')
+            self.write_log("Tables created")
+
 
     def get_user_shows(self, username):
         result = []
@@ -290,4 +305,28 @@ class Backend(object):
                 result.append(dict(zip(keys, list(item))))
         return result
 
+    def write_log(self, message, logtype=0):
+        now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S:%f")
+        with sqlite3.connect(DATABASE) as c:
+            c.execute(''' INSERT INTO 
+                          log(datetime,
+                              message,
+                              type)
+                          VALUES (?, ?, ?) ''',
+                          (now,
+                           message,
+                           logtype))
+
+
+    def get_log(self):
+        result = []
+        keys = ["datetime", "message", "type"]
+        with sqlite3.connect(DATABASE) as c:
+            response = c.execute(''' SELECT datetime, message, type
+                          FROM log
+                          ORDER BY datetime DESC''')
+        for item in response.fetchall():
+            itemdict =dict(zip(keys,list(item)))
+            result.append(itemdict)
+        return result
 
