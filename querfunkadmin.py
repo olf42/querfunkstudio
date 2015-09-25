@@ -174,6 +174,35 @@ class Querfunkadmin(object):
         return self.env.get_template('shows.html').render(shows=shows,error=error)
 
     @cherrypy.expose
+    def show(self, **kwargs):
+
+        nousers = ERROR_NOUSERSFOUND_MSG
+        users = []
+        showdata = dict()
+
+        try:
+            user = self.user_.superuser_authenticated()
+        except ValueError as e:
+            return self.env.get_template('index.html').render(error=e)
+
+        if len(kwargs)>0:
+            try:
+                showdata = self.backend_.get_showdata(kwargs['id'])
+            except ValueError as e:
+                error=e
+
+        showusers = self.backend_.get_show_users(kwargs['id'])
+        users = self.backend_.get_users()
+
+
+        return self.env.get_template('show.html').render(showdata=showdata,
+                                                        showusers=showusers,
+                                                        users=users,
+                                                        nousers=nousers)
+
+
+
+    @cherrypy.expose
     def log(self):
 
         try:

@@ -96,6 +96,17 @@ class Querfunkbackend(object):
 
         return dict(zip(userkeys, userdata))
 
+    def get_showdata(self, show_id):
+        showkeys = ['name', 'description']
+        showdata = dict()
+
+        try:
+            showdata = self.backend_.get_show(show_id)
+        except:
+            raise
+
+        return dict(zip(showkeys, showdata))
+
     def get_user_shows(self, username):
         try:
             user_shows = self.backend_.get_user_shows(username)
@@ -103,6 +114,14 @@ class Querfunkbackend(object):
             raise
 
         return user_shows
+
+    def get_show_users(self, show_id):
+        try:
+            show_users = self.backend_.get_show_users(show_id)
+        except:
+            raise
+
+        return show_users
 
 
 class Backend(object):
@@ -155,6 +174,20 @@ class Backend(object):
                 return result
             except:
                 raise ValueError(ERROR_NOSHOWSFOUND_MSG)
+
+    def get_show_users(self, show_id):
+        result = []
+        with sqlite3.connect(DATABASE) as c:
+            self.user_shows = c.execute('''SELECT users.username
+                                          FROM users JOIN show_user using (username)
+                                          WHERE id=?''',
+                                          (show_id,))
+            try:
+                for item in self.user_shows.fetchall():
+                    result.append(item[0])
+                return result
+            except:
+                raise ValueError(ERROR_NOUSERSFOUND_MSG)
 
 
     def get_show(self, show_id):

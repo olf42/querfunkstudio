@@ -1,0 +1,68 @@
+{% extends "admin-base.html" %}
+
+{% block title %}
+{{ showdata.name }}
+{% endblock %}
+
+{% block content %}
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-4">
+			{% if showdata %}
+			<h2>{{showdata.name}}</h2>
+			<form method="POST" action="/admin/show">
+                                        <fieldset>
+                                                <input class="form-control" name="query" value="update" type="hidden">
+					<div class="form-group">
+						<label for="name" class="control-label">Name</label>
+						<input class="form-control" name="name" type="text" value="{{showdata.name}}">
+                                        </div>
+					<div class="form-group">
+						<label for="description" class="control-label">Description</label>
+						<textarea class="form-control" rows="5" id="description">{{showdata.description}}</textarea>
+                                        </div>
+                                        <div class="form-group">
+						<input type="submit" value="Submit" class="btn btn-primary" >
+                                        </div>
+                                        </fieldset>
+                                        </form>
+			{% endif %}
+			</div>
+			<div class="col-md-4">
+			<h2>Users</h2>
+			{% if not users %}
+				<p>
+				{{ nousers }}
+				</p>
+			{% endif %}
+			<ul>
+				{% for user in showusers %}
+					<li><a href="/admin/user?name={{ user }}">{{ user }}</a></li>
+				{% endfor %}
+			</ul>
+			<h2>Add User</h2>
+			<form method="POST" action="/admin/show">
+                                        <fieldset>
+                                                <input class="form-control" name="query" value="add" type="hidden">
+					<div class="form-group">
+						<label for="user" class="control-label">Add user</label>
+						<select class="form-control" id="user">
+							{% for user in users %}
+								<option >{{ user }}</option>
+							{% endfor %}
+						</select>
+                                        </div>
+                                        <div class="form-group">
+						<input type="submit" value="Add User" class="btn btn-primary" >
+                                        </div>
+                                        </fieldset>
+                                        </form>
+
+			</div>
+			<div class="col-md-2"></div>
+		</div><!-- /.row -->
+	<hr>
+
+{% endblock %}
+
+
