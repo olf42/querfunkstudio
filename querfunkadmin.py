@@ -177,7 +177,7 @@ class Querfunkadmin(object):
     def show(self, **kwargs):
 
         nousers = ERROR_NOUSERSFOUND_MSG
-        users = []
+        showusers = []
         showdata = dict()
 
         try:

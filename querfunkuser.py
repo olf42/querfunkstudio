@@ -12,7 +12,10 @@ class Querfunkuser(object):
         self.user_ = Users()
 
     def process_request(self, kwargs):
-        query = kwargs['query']
+        try:
+            query = kwargs['query']
+        except:
+            raise ValueError(ERROR_LOGIN_MSG)
 
         # Login Processing
         if query == 'login':
