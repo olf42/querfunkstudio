@@ -85,8 +85,6 @@ class Schedule(object):
                                                                      name))
                 print("But this spot is already occupied by {0}".format(self.schedule[week][day][time]['name']))
 
-    def get_schedule(self):
-        return self.schedule
 
     def get_shows(self):
         return self.shows
