@@ -18,6 +18,9 @@ if __name__ == '__main__':
 
     # Test Data
     if not os.path.isfile(DATABASE):
+        log_ = Log()
+        log_.create_db()
+
         users_ = Users()
         users_.create_db()
 

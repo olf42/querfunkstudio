@@ -13,6 +13,7 @@ class Querfunkadmin(object):
     def __init__(self, template_env):
         self.user_ = Querfunkuser()
         self.backend_ = Querfunkbackend()
+        self.log_ = Log()
         self.env = template_env
 
     @cherrypy.expose
@@ -216,7 +217,7 @@ class Querfunkadmin(object):
         except ValueError as e:
             return self.env.get_template('index.html').render(error=e)
 
-        logs = self.backend_.get_log()
+        logs = self.log_.get_log()
         for message in logs:
             message['type'] = LOG_DISPLAY[message['type']]
         return self.env.get_template('log.html').render(logs=logs)

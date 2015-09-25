@@ -51,3 +51,5 @@ ERROR_UPDATEUSER_MSG = "An error occured, while updating the user data."
 SUCCESS_UPDATEUSER_MSG = "Update successful."
 SUCCESS_STATIONXMLIMPORT_MSG = "Added {0} successfully."
 SUCCESS_REGISTRATION_MSG = "Account created. Needs approval."
+
+LOG_TABLESCREATED_MSG = "Tables created."
