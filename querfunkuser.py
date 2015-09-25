@@ -15,7 +15,7 @@ class Querfunkuser(object):
         try:
             query = kwargs['query']
         except:
-            raise ValueError(ERROR_LOGIN_MSG)
+            raise ValueError(ERROR_INVALIDQUERY_MSG)
 
         # Login Processing
         if query == 'login':
@@ -66,6 +66,7 @@ class Querfunkuser(object):
             raise
         return username
 
+
 class Users(object):
 
     def create_db(self):
@@ -92,6 +93,38 @@ class Users(object):
                            superuser))
             except:
                 raise ValueError(ERROR_USERCREATE_MSG)
+
+    def update_user(self, username, active, superuser):
+        with sqlite3.connect(DATABASE) as c:
+            try:
+                c.execute(''' UPDATE 
+                              users
+                              SET active = ?,
+                                  superuser = ?
+                              WHERE username = ? ''',
+                          (active,
+                           superuser,
+                           username))
+            except:
+                raise ValueError(ERROR_UPDATEUSER_MSG)
+
+
+    def update_user_pw(self, username, password, active, superuser):
+        with sqlite3.connect(DATABASE) as c:
+            try:
+                c.execute(''' UPDATE 
+                              users
+                              SET password = ?,
+                                  active = ?,
+                                  superuser = ?
+                              WHERE username = ? ''',
+                          (encrypt_pw(password),
+                           active,
+                            superuser,
+                            username))
+            except:
+                raise ValueError(ERROR_UPDATEUSER_MSG)
+
 
     def check_username(self, username):
         result = None

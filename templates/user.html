@@ -10,21 +10,21 @@
 			<div class="col-md-4">
 			{% if userdata %}
 			<h2>{{userdata.name}}</h2>
-			<form method="POST" action="/admin/user">
+			<form method="POST" action="/admin/user?name={{userdata.name}}">
                                         <fieldset>
                                                 <input class="form-control" name="query" value="update" type="hidden">
 					<div class="form-group">
 						<label for="active" class="control-label">Active</label>
-					        <select class="form-control" id="active">
-						<option {% if not userdata.active %}selected{% endif %}>Inactive</option>
-						<option {% if userdata.active %}selected{% endif %}>Active</option>
+					        <select class="form-control" name="active" id="active">
+						<option name="active" value="0"{% if not userdata.active %}selected{% endif %}>Inactive</option>
+						<option name="active" value="1"{% if userdata.active %}selected{% endif %}>Active</option>
 					        </select>
                                         </div>
 					<div class="form-group">
 						<label for="superuser" class="control-label">Superuser</label>
-					        <select class="form-control" id="superuser">
-						<option {% if not userdata.superuser %}selected{% endif %}>Normal User</option>
-						<option {% if userdata.superuser %}selected{% endif %}>Superuser</option>
+					        <select class="form-control" name="superuser" id="superuser">
+						<option name="superuser" value="0" {% if not userdata.superuser %}selected{% endif %}>Normal User</option>
+						<option name="superuser" value="1" {% if userdata.superuser %}selected{% endif %}>Superuser</option>
 					        </select>
                                         </div>
                                         <div class="form-group">

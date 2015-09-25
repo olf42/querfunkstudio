@@ -123,6 +123,38 @@ class Querfunkbackend(object):
 
         return show_users
 
+    def update_user(self, kwargs):
+        try:
+            query = kwargs['query']
+        except:
+            raise ValueError(ERROR_INVALIDQUERY_MSG)
+
+        if query == "update":
+            try:
+                name = kwargs['name']
+                password = kwargs['password']
+                active = kwargs['active']
+                superuser = kwargs['superuser']
+            except:
+                raise ValueError(ERROR_INVALIDQUERY_MSG)
+
+            if not password:
+                try:
+                    self.users_.update_user(username=name,
+                                       active=active,
+                                       superuser=superuser)
+                except:
+                    raise
+            else:
+                try:
+                    self.users_.update_user_pw(username=name,
+                                           password=password,
+                                           active=active,
+                                           superuser=superuser)
+                except:
+                    raise
+
+        return SUCCESS_UPDATEUSER_MSG
 
 class Backend(object):
 

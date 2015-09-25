@@ -136,6 +136,8 @@ class Querfunkadmin(object):
 
         noshows = ERROR_NOSHOWSFOUND_MSG
         shows = []
+        success = str()
+        error = str()
 
         try:
             user = self.user_.superuser_authenticated()
@@ -143,17 +145,23 @@ class Querfunkadmin(object):
             return self.env.get_template('index.html').render(error=e)
 
         if len(kwargs)>0:
+            # First, we update the userdata in the database
+            try:
+                success = self.backend_.update_user(kwargs)
+            except ValueError as e:
+                error=str(e)
+            # Then, we fetch the current userdata from the db
             try:
                 userdata = self.backend_.get_userdata(kwargs['name'])
             except ValueError as e:
-                error=e
+                error=error+str(e)
 
         shows = self.backend_.get_user_shows(kwargs['name'])
 
-        print(shows)
         return self.env.get_template('user.html').render(userdata=userdata,
                                                         shows=shows,
-                                                        noshows=noshows)
+                                                        noshows=noshows,
+                                                        success=success)
 
 
     @cherrypy.expose
