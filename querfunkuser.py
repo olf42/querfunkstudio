@@ -35,6 +35,11 @@ class Querfunkuser(object):
             username = kwargs['username']
             password = kwargs['password']
             password_repeat = kwargs['password_repeat']
+
+            for char in BAD_CHARACTERS:
+                if username.find(char) > -1:
+                    raise ValueError(ERROR_BADCHARACTERS_MSG)
+
             if password == password_repeat:
                 try:
                     self.user_.add_user(username, password)

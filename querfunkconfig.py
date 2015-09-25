@@ -29,7 +29,9 @@ WEEKDAYS =   { "Mo" : 1,
                7: "Sunday",
                }
 
+BAD_CHARACTERS = '`!@#&<>?'
 
+ERROR_BADCHARACTERS_MSG = "Username contains bad characters, such as: {0}".format(BAD_CHARACTERS)
 ERROR_LOGIN_MSG = "Username not found, Password mismatch or user not active"
 ERROR_SESSION_MSG = "No Username found in your Session. Please log in."
 ERROR_USERCREATE_MSG = "User already exists! Choose a different Name and try again."
