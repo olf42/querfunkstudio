@@ -5,6 +5,7 @@ import sqlite3
 
 from querfunkconfig import *
 from querfunktools import *
+from querfunklog import *
 
 class Querfunkuser(object):
 
@@ -74,6 +75,9 @@ class Querfunkuser(object):
 
 class Users(object):
 
+    def __init__(self):
+        self.log_ = Log()
+
     def create_db(self):
         with sqlite3.connect(DATABASE) as c:
             c.execute(''' CREATE TABLE 
@@ -82,6 +86,7 @@ class Users(object):
                                 password TEXT,
                                 active INTEGER,
                                 superuser INTEGER) ''')
+        self.log_.write_log(LOG_USERTABLESCREATED_MSG)
 
     def add_user(self, username, password, active=0, superuser=0):
         with sqlite3.connect(DATABASE) as c:
@@ -98,6 +103,7 @@ class Users(object):
                            superuser))
             except:
                 raise ValueError(ERROR_USERCREATE_MSG)
+        self.log_.write_log(LOG_ADDEDUSER_MSG.format(username))
 
     def update_user(self, username, active, superuser):
         with sqlite3.connect(DATABASE) as c:
@@ -112,6 +118,9 @@ class Users(object):
                            username))
             except:
                 raise ValueError(ERROR_UPDATEUSER_MSG)
+        self.log_.write_log(LOG_UPDATEDUSER_MSG.format(username,
+                                                       YES_NO[int(active)],
+                                                       YES_NO[int(superuser)]))
 
 
     def update_user_pw(self, username, password, active, superuser):
@@ -129,6 +138,9 @@ class Users(object):
                             username))
             except:
                 raise ValueError(ERROR_UPDATEUSER_MSG)
+        self.log_.write_log(LOG_UPDATEDUSER_MSG.format(username,
+                                                       YES_NO[int(active)],
+                                                       YES_NO[int(superuser)]))
 
 
     def check_username(self, username):

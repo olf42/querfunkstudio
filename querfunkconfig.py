@@ -28,6 +28,9 @@ WEEKDAYS =   { "Mo" : 1,
                6: "Saturday",
                7: "Sunday",
                }
+YES_NO =    { 0 : "No",
+              1 : "Yes"
+            }
 
 BAD_CHARACTERS = '`!@#&<>?'
 
@@ -53,3 +56,6 @@ SUCCESS_STATIONXMLIMPORT_MSG = "Added {0} successfully."
 SUCCESS_REGISTRATION_MSG = "Account created. Needs approval."
 
 LOG_TABLESCREATED_MSG = "Tables created."
+LOG_USERTABLESCREATED_MSG = "User tables created."
+LOG_ADDEDUSER_MSG = "Added user <b>{0}</b>"
+LOG_UPDATEDUSER_MSG = "Updated user <b>{0}</b> (Active: {1}; Superuser: {2})"
