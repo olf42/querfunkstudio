@@ -208,8 +208,6 @@ class Querfunkadmin(object):
                                                         users=users,
                                                         nousers=nousers)
 
-
-
     @cherrypy.expose
     def log(self):
 

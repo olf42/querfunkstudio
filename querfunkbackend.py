@@ -156,11 +156,11 @@ class Querfunkbackend(object):
 
         return SUCCESS_UPDATEUSER_MSG
 
-        def write_log(self, message, logtype=0):
-            self.backend_.write_log(message, logtype)
+    def write_log(self, message, logtype=0):
+        self.backend_.write_log(message, logtype)
 
-        def get_log(self):
-            return self.backend_.get_log()
+    def get_log(self):
+        return self.backend_.get_log()
 
 class Backend(object):
 

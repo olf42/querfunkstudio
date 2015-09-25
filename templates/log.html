@@ -1,33 +1,37 @@
-{% extends "base.html" %}
+{% extends "admin-base.html" %}
 
 {% block title %}
-Log
+Logs
 {% endblock %}
 
-
 {% block content %}
-	<hr>
-
-
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-8">
-				<table class="table table-striped table-hover ">
-					<thead>
-						<td>Date</td>
-						<td>Message</td>
-					</thead>
-				{% for message in logs %}
-				<tr class=" {{message.type}} ">
-					<td>{{ message.datetime }}</td>
-					<td>{{ message.message }}</td>
-				</tr>
+			<h2>Logs</h2>
+			{% if logs %}
+			<table class="table table-striped table-hover ">
+                                        <thead>
+						<th>Date</th>
+                                                <th>Message</th>
+                                        </thead>
+					{% for log in logs %}
+					<tr class=" {{ log.type }}">
+						<td>
+							{{ log.datetime }}
+						</td>
+						<td>
+							{{ log.message}}
+						</td>
+					</tr>	
 				{% endfor %}
-				</table>
+			</table>	
+			{% endif %}
 			</div>
 			<div class="col-md-2"></div>
 		</div><!-- /.row -->
-
+	<hr>
 
 {% endblock %}
+
 
