@@ -253,6 +253,7 @@ class Backend(object):
                            description))
             except ValueError:
                 raise ValueError(ERROR_ADDSHOW_MSG)
+        self.log_.write_log(LOG_ADDEDSHOW_MSG.format(name, show_id))
 
 
     def add_stationxml(self, content, alias):
@@ -266,6 +267,7 @@ class Backend(object):
                            content))
             except ValueError:
                 raise ValueError(ERROR_STATIONXMLIMPORT_MSG)
+        self.log_.write_log(LOG_ADDEDSTATIONXML_MSG.format(alias))
         return SUCCESS_STATIONXMLIMPORT_MSG.format(alias)
 
     def get_schedule(self, schedule_id):
