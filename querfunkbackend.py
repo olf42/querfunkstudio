@@ -21,7 +21,7 @@ class Querfunkbackend(object):
             raise
 
     def get_schedule(self, kwargs):
-        keys = ['alias', 'id', 'content']
+        keys = ['alias', 'id', 'content', 'dates']
         try:
             self.schedule_id = kwargs['id']
         except:
@@ -36,7 +36,7 @@ class Querfunkbackend(object):
 
         querfunk = ScheduleView()
         querfunk.import_stationxml(schedule)
-        return dict(zip(keys, [alias, self.schedule_id, querfunk.get_schedule()]))
+        return dict(zip(keys, [alias, self.schedule_id, querfunk.get_schedule(), querfunk.get_dates()]))
         #return dict(zip(keys, [alias, self.schedule_id, querfunk.show_schedule()]))
 
     def get_schedules(self):

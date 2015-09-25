@@ -11,6 +11,10 @@ Schedule {{ alias }}
 			<div class="col-md-2"></div>
 				<div class="col-md-8">
 					<h2>Schedule {{ schedule.alias }}</h2>
+					<p>
+					<b> Start date:</b>&nbsp;{{schedule.dates.start}}<br>
+					<b> End date:</b>&nbsp;{{schedule.dates.end}}<br>
+					</p>
 					<ul class="nav nav-tabs">
 					{% for week, weekcontent in schedule.content.items() %}
 						<li class="dropdown">

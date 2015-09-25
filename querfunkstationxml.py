@@ -53,6 +53,12 @@ class Schedule(object):
         except KeyError:
             self.shows[b_id] = b_name
 
+    def set_programflyer(self, programflyer):
+            startdate = programflyer.find("startdate").text
+            enddate = programflyer.find("enddate").text
+            self.start = datetime.datetime.strptime(startdate, "%m-%d-%Y")
+            self.end = datetime.datetime.strptime(enddate, "%m-%d-%Y")
+
     def set_schedule(self, stationxmltree):
         for broadcast in stationxmltree.findall("broadcast"):
             broadcast_id = broadcast.attrib['id']
@@ -85,6 +91,10 @@ class Schedule(object):
                                                                      name))
                 print("But this spot is already occupied by {0}".format(self.schedule[week][day][time]['name']))
 
+    def get_dates(self):
+        keys = ["start", "end"]
+        return dict(zip(keys, list((self.start.strftime("%d.%m.%Y"),
+                                    self.end.strftime("%d.%m.%Y")))))
 
     def get_shows(self):
         return self.shows
@@ -112,13 +122,18 @@ class ScheduleView(object):
         sxml = ET.fromstring(content)
 
         try:
+            sxml_programflyer = sxml.find("programflyer")
             sxml_schedule = sxml.find("schedule")
             self.schedule.set_schedule(sxml_schedule)
+            self.schedule.set_programflyer(sxml_programflyer)
         except NameError as e:
-            print("Unexpected error:", e)
+            raise
 
     def get_shows(self):
         return self.schedule.get_shows()
 
     def get_schedule(self):
         return self.schedule.get_schedule()
+
+    def get_dates(self):
+        return self.schedule.get_dates()
