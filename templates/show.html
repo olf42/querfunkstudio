@@ -10,7 +10,7 @@
 			<div class="col-md-4">
 			{% if showdata %}
 			<h2>{{showdata.name}}</h2>
-			<form method="POST" action="/admin/show">
+			<form method="POST" action="/admin/show?id={{show_id}}">
                                         <fieldset>
                                                 <input class="form-control" name="query" value="update" type="hidden">
 					<div class="form-group">
@@ -19,7 +19,7 @@
                                         </div>
 					<div class="form-group">
 						<label for="description" class="control-label">Description</label>
-						<textarea class="form-control" rows="5" id="description">{{showdata.description}}</textarea>
+						<textarea class="form-control" rows="5" name="description" id="description">{{showdata.description}}</textarea>
                                         </div>
                                         <div class="form-group">
 						<input type="submit" value="Submit" class="btn btn-primary" >

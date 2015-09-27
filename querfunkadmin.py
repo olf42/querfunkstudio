@@ -156,7 +156,7 @@ class Querfunkadmin(object):
             try:
                 userdata = self.backend_.get_userdata(kwargs['name'])
             except ValueError as e:
-                error=error+str(e)
+                error+=str(e)
 
         shows = self.backend_.get_user_shows(kwargs['name'])
 
@@ -190,6 +190,8 @@ class Querfunkadmin(object):
         nousers = ERROR_NOUSERSFOUND_MSG
         showusers = []
         showdata = dict()
+        error = str()
+        success = str()
 
         try:
             user = self.user_.superuser_authenticated()
@@ -197,18 +199,28 @@ class Querfunkadmin(object):
             return self.env.get_template('index.html').render(error=e)
 
         if len(kwargs)>0:
+            # First, we update the userdata in the database
+            if len(kwargs)>1:
+                try:
+                    success = self.backend_.update_show(kwargs)
+                except ValueError as e:
+                    error=str(e)
             try:
-                showdata = self.backend_.get_showdata(kwargs['id'])
+                show_id = kwargs['id']
+                showdata = self.backend_.get_showdata(show_id)
             except ValueError as e:
-                error=e
+                error+=str(e)
 
-        showusers = self.backend_.get_show_users(kwargs['id'])
+        showusers = self.backend_.get_show_users(show_id)
         users = self.backend_.get_users()
 
 
         return self.env.get_template('show.html').render(showdata=showdata,
                                                         showusers=showusers,
                                                         users=users,
+                                                        show_id=show_id,
+                                                        success=success,
+                                                        error=error,
                                                         nousers=nousers)
 
     @cherrypy.expose

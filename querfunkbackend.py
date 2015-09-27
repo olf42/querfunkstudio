@@ -158,6 +158,30 @@ class Querfunkbackend(object):
 
         return SUCCESS_UPDATEUSER_MSG
 
+    def update_show(self, kwargs):
+        try:
+            query = kwargs['query']
+        except:
+            raise ValueError(ERROR_INVALIDQUERY_MSG)
+
+        if query == "update":
+            print(kwargs)
+            try:
+                show_id = kwargs['id']
+                name = kwargs['name']
+                description = kwargs['description']
+            except:
+                raise ValueError(ERROR_INVALIDQUERY_MSG)
+
+            try:
+                self.backend_.update_show(show_id,
+                                          name,
+                                          description)
+            except:
+                raise
+
+        return SUCCESS_UPDATESHOW_MSG
+
 
 class Backend(object):
 
@@ -198,6 +222,22 @@ class Backend(object):
                                     FOREIGN KEY(stationxml_id) REFERENCES stationxml(stationxml_id)
                                     )''')
             self.log_.write_log(LOG_TABLESCREATED_MSG)
+
+    def update_show(self, show_id, name, description):
+        with sqlite3.connect(DATABASE) as c:
+            try:
+                c.execute(''' UPDATE 
+                              shows
+                              SET name = ?,
+                                  description = ?
+                              WHERE id = ? ''',
+                          (name,
+                           description,
+                           show_id))
+            except:
+                raise ValueError(ERROR_UPDATESHOW_MSG)
+        self.log_.write_log(LOG_UPDATEDSHOW_MSG.format(name))
+
 
     def get_user_shows(self, username):
         result = []
