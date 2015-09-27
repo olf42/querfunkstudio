@@ -40,6 +40,7 @@
 					<li><a href="/admin/user?name={{ user }}">{{ user }}</a></li>
 				{% endfor %}
 			</ul>
+			{% if users %}
 			<h2>Add User</h2>
 			<form method="POST" action="/admin/show?id={{show_id}}">
                                         <fieldset>
@@ -57,7 +58,7 @@
                                         </div>
                                         </fieldset>
                                         </form>
-
+			{% endif %}
 			</div>
 			<div class="col-md-2"></div>
 		</div><!-- /.row -->
