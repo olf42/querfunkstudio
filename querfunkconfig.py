@@ -31,6 +31,10 @@ WEEKDAYS =   { "Mo" : 1,
 YES_NO =    { 0 : "No",
               1 : "Yes"
             }
+LIVE_REPEAT = { 0:"repeat",
+                1:"live",
+                "repeat":0,
+                "live":1}
 
 BAD_CHARACTERS = '`!@#&<>?'
 
@@ -52,6 +56,9 @@ ERROR_NOUSERSFOUND_MSG = "No users found!"
 ERROR_INVALIDQUERY_MSG = "Invalid Query."
 ERROR_UPDATEUSER_MSG = "An error occured, while updating the user data."
 ERROR_UPDATEUSER_MSG = "An error occured, while updating the show data."
+ERROR_STATIONXMLDATES_MSG = "The schedule has to end AFTER it begins!"
+ERROR_ADDEPISODE_MSG = "Adding the episode {0} was not possible."
+ERROR_CALENDAREXISTS_MSG = "There are already episodes in the calendar for {0}"
 
 SUCCESS_UPDATESHOW_MSG = "Show update successful."
 SUCCESS_UPDATEUSER_MSG = "User update successful."
@@ -65,4 +72,5 @@ LOG_UPDATEDUSER_MSG = "Updated user <b>{0}</b> (Active: {1}; Superuser: {2})"
 LOG_UPDATEDSHOW_MSG = "Updated show <b>{0}</b>"
 LOG_ADDEDSTATIONXML_MSG = "Imported stationxml <b>{0}</b>"
 LOG_ADDEDSHOW_MSG = "Added show <b>{0} ({1})</b>"
+LOG_ADDEDCALENDAR_MSG = "Added episodes for Schedule <b>{0}</b>"
 LOG_ADDEDUSERSHOW_MSG = "Added user <b>{0}</b> to show <b>{1}</b>"

@@ -96,6 +96,9 @@ class Schedule(object):
         return dict(zip(keys, list((self.start.strftime("%d.%m.%Y"),
                                     self.end.strftime("%d.%m.%Y")))))
 
+    def get_dates_obj(self):
+        return self.start, self.end
+
     def get_shows(self):
         return self.shows
 
@@ -137,3 +140,9 @@ class ScheduleView(object):
 
     def get_dates(self):
         return self.schedule.get_dates()
+
+    def get_dates_obj(self):
+        return self.schedule.get_dates_obj()
+
+    def get_day(self, week, day):
+        return self.schedule.get_day(week, day)

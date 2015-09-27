@@ -54,6 +54,11 @@ class Querfunkbackend(object):
             raise ValueError(ERROR_NOSCHEDULESFOUND_MSG)
 
     def generate_calendar(self, schedule_id):
+
+        # First, we check, if this schedule was already added
+        if self.backend_.calendar_exists(schedule_id):
+            raise ValueError(ERROR_CALENDAREXISTS_MSG.format(schedule_id))
+
         try:
             schedule = self.backend_.get_schedule(schedule_id)[0][0]
         except:
@@ -71,6 +76,45 @@ class Querfunkbackend(object):
                 added_shows[show_id] = show_name
             except:
                 existing_shows[show_id] = show_name
+
+        #Create the calendar
+
+        start, end = querfunk.get_dates_obj()
+
+        #Check if enddate is after startdate
+        if (end-start).days<0:
+            raise ValueError(ERROR_STATIONXMLDATES_MSG)
+
+        today = start
+        while True:
+            week = int(((today.day-1)/7)+1)
+            weekday = today.weekday()+1
+
+            year = today.year
+            month = today.month
+            day = today.day
+
+            for show in querfunk.get_day(week, weekday).items():
+                #check if there is a show for specific time
+                if show[1]:
+                    hour = int(show[0])
+                    live = LIVE_REPEAT[show[1]['live']]
+                    show_id = show[1]['id']
+                    length = show[1]['length']
+
+                    try:
+                        self.backend_.add_episode((year, month, day, hour, length, live, show_id, schedule_id))
+                    except:
+                        episode_string = today.strftime("%Y-%m-%d")+" "+str(hour)+" "+str(show_id)
+                        raise ValueError(ERROR_ADDEPISODE_MSG.format(episode_string))
+
+            #increment and check
+            today+=datetime.timedelta(1)
+            if (today-end).days>0:
+                break
+
+        self.log_.write_log(LOG_ADDEDCALENDAR_MSG.format(schedule_id))
+
         return added_shows, existing_shows, len(shows)
 
     def get_shows(self):
@@ -237,6 +281,7 @@ class Backend(object):
                                     month INTEGER,
                                     day INTEGER,
                                     hour INTEGER,
+                                    length INTEGER,
                                     live INTEGER,
                                     id INTEGER,
                                     stationxml_id INTEGER,
@@ -316,6 +361,24 @@ class Backend(object):
         except:
             raise ValueError(ERROR_SHOWNOTFOUND_MSG)
 
+    def add_episode(self, data):
+        with sqlite3.connect(DATABASE) as c:
+            try:
+                c.execute(''' INSERT INTO 
+                              calendar(year,
+                                       month,
+                                       day,
+                                       hour,
+                                       length,
+                                       live,
+                                       id,
+                                       stationxml_id) 
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?) ''',
+                          data)
+            except ValueError:
+                raise ValueError(ERROR_ADDEPISODE_MSG.format(str(data)))
+
+
     def add_show(self, show_id, name, description=''):
         with sqlite3.connect(DATABASE) as c:
             try:
@@ -374,3 +437,15 @@ class Backend(object):
             for item in self.schedules.fetchall():
                 result.append(dict(zip(keys, list(item))))
         return result
+
+    def calendar_exists(self, schedule_id):
+        with sqlite3.connect(DATABASE) as c:
+            result = c.execute(''' SELECT * 
+                                   FROM calendar
+                                   WHERE stationxml_id=?''',
+                                (schedule_id,))
+            for item in result.fetchall():
+                if item:
+                    return True
+                else:
+                    return False

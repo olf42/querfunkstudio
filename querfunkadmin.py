@@ -79,6 +79,9 @@ class Querfunkadmin(object):
         error = str()
         shows = dict()
         no_of_shows = 0
+        added_shows= []
+        existing_shows= []
+        
         try:
             user = self.user_.superuser_authenticated()
         except ValueError as e:
