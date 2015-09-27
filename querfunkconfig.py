@@ -62,6 +62,7 @@ ERROR_CALENDAREXISTS_MSG = "There are already episodes in the calendar for {0}"
 
 SUCCESS_UPDATESHOW_MSG = "Show update successful."
 SUCCESS_UPDATEUSER_MSG = "User update successful."
+SUCCESS_ADDEDCALENDAR_MSG = "Calendar creation successful."
 SUCCESS_STATIONXMLIMPORT_MSG = "Added {0} successfully."
 SUCCESS_REGISTRATION_MSG = "Account created. Needs approval."
 

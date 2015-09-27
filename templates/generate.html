@@ -9,19 +9,23 @@ Admin
 		<div class="row">
 			<div class="col-md-2"></div>
 				<div class="col-md-8">
-					<h2>Generating Calendar...</h2>
-					Found {{ no_of_shows }} shows.
+					<h2>Shows</h2>
+					<p>Found {{ no_of_shows }} shows.</p>
 					{% if added_shows %}
 					<h3>Added new shows:</h3>
+					<ul>
 					{% for show_id, show_name in added_shows.items() %}
-					{{ show_id }} - {{ show_name}}<br>
+						<li>{{ show_name }} ({{ show_id}})</li>
 					{% endfor %}
+					</ul>
 					{% endif %}
 					{% if existing_shows %}
 					<h3>Existing shows:</h3>
+					<ul>
 					{% for show_id, show_name in existing_shows.items() %}
-					{{ show_id }} - {{ show_name}}<br>
+						<li>{{ show_name }} ({{ show_id}})</li>
 					{% endfor %}
+					</ul>
 					{% endif %}
 				</div>
 			<div class="col-md-2"></div>

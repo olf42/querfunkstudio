@@ -81,7 +81,8 @@ class Querfunkadmin(object):
         no_of_shows = 0
         added_shows= []
         existing_shows= []
-        
+        success = str()
+
         try:
             user = self.user_.superuser_authenticated()
         except ValueError as e:
@@ -90,6 +91,7 @@ class Querfunkadmin(object):
         if len(kwargs)>0:
             try:
                 added_shows, existing_shows, no_of_shows = self.backend_.generate_calendar(kwargs['id'])
+                success = SUCCESS_ADDEDCALENDAR_MSG
             except ValueError as e:
                 error=e
 
@@ -97,6 +99,7 @@ class Querfunkadmin(object):
                                                              existing_shows=existing_shows,
                                                              no_of_shows=no_of_shows,
                                                              error=error,
+                                                             success=success
                                                             )
 
     @cherrypy.expose
