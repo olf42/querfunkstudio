@@ -38,8 +38,13 @@ class Querfunkbackend(object):
 
         querfunk = ScheduleView()
         querfunk.import_stationxml(schedule)
-        return dict(zip(keys, [alias, self.schedule_id, querfunk.get_schedule(), querfunk.get_dates()]))
-        #return dict(zip(keys, [alias, self.schedule_id, querfunk.show_schedule()]))
+        return dict(zip(keys, [alias,
+                               self.schedule_id,
+                               querfunk.get_schedule(),
+                               querfunk.get_dates()
+                              ]
+                        )
+                    )
 
     def get_schedules(self):
         schedules = self.backend_.get_schedules()
@@ -55,6 +60,8 @@ class Querfunkbackend(object):
             raise ValueError(ERROR_SCHEDULENOTFOUND_MSG)
         querfunk = ScheduleView()
         querfunk.import_stationxml(schedule)
+
+        #Search for shows not yet in the db and add them
         shows = querfunk.get_shows()
         existing_shows = dict()
         added_shows = dict()
