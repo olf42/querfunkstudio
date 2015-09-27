@@ -214,6 +214,9 @@ class Querfunkadmin(object):
         showusers = self.backend_.get_show_users(show_id)
         users = self.backend_.get_users()
 
+        # Remove already connected users from the users to add list
+        for user in showusers:
+            users.pop(user)
 
         return self.env.get_template('show.html').render(showdata=showdata,
                                                         showusers=showusers,
