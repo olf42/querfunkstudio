@@ -147,10 +147,11 @@ class Querfunkadmin(object):
 
         if len(kwargs)>0:
             # First, we update the userdata in the database
-            try:
-                success = self.backend_.update_user(kwargs)
-            except ValueError as e:
-                error=str(e)
+            if len(kwargs)>1:
+                try:
+                    success = self.backend_.update_user(kwargs)
+                except ValueError as e:
+                    error=str(e)
             # Then, we fetch the current userdata from the db
             try:
                 userdata = self.backend_.get_userdata(kwargs['name'])
@@ -162,6 +163,7 @@ class Querfunkadmin(object):
         return self.env.get_template('user.html').render(userdata=userdata,
                                                         shows=shows,
                                                         noshows=noshows,
+                                                        error=error,
                                                         success=success)
 
 
