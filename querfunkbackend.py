@@ -155,6 +155,8 @@ class Querfunkbackend(object):
                                            superuser=superuser)
                 except:
                     raise
+        else:
+            raise ValueError(ERROR_INVALIDQUERY_MSG)
 
         return SUCCESS_UPDATEUSER_MSG
 
@@ -165,7 +167,6 @@ class Querfunkbackend(object):
             raise ValueError(ERROR_INVALIDQUERY_MSG)
 
         if query == "update":
-            print(kwargs)
             try:
                 show_id = kwargs['id']
                 name = kwargs['name']
@@ -179,6 +180,20 @@ class Querfunkbackend(object):
                                           description)
             except:
                 raise
+        elif query == "add":
+            try:
+                show_id = kwargs['id']
+                name = kwargs['user']
+            except:
+                raise ValueError(ERROR_INVALIDQUERY_MSG)
+
+            try:
+                self.backend_.add_user_show(show_id,
+                                          name)
+            except:
+                raise
+        else:
+            raise ValueError(ERROR_INVALIDQUERY_MSG)
 
         return SUCCESS_UPDATESHOW_MSG
 
@@ -237,6 +252,20 @@ class Backend(object):
             except:
                 raise ValueError(ERROR_UPDATESHOW_MSG)
         self.log_.write_log(LOG_UPDATEDSHOW_MSG.format(name))
+
+    def add_user_show(self, show_id, name):
+        with sqlite3.connect(DATABASE) as c:
+            try:
+                c.execute(''' INSERT INTO 
+                              show_user(id,
+                                    username) 
+                              VALUES (?, ?) ''',
+                          (show_id,
+                           name))
+            except ValueError:
+                raise ValueError(ERROR_ADDUSERSHOW_MSG)
+        self.log_.write_log(LOG_ADDEDUSERSHOW_MSG.format(name, show_id))
+
 
 
     def get_user_shows(self, username):

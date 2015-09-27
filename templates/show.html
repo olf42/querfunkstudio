@@ -41,14 +41,14 @@
 				{% endfor %}
 			</ul>
 			<h2>Add User</h2>
-			<form method="POST" action="/admin/show">
+			<form method="POST" action="/admin/show?id={{show_id}}">
                                         <fieldset>
                                                 <input class="form-control" name="query" value="add" type="hidden">
 					<div class="form-group">
 						<label for="user" class="control-label">Add user</label>
-						<select class="form-control" id="user">
+						<select class="form-control" id="user" name="user">
 							{% for user in users %}
-								<option >{{ user }}</option>
+								<option name="user">{{ user }}</option>
 							{% endfor %}
 						</select>
                                         </div>
