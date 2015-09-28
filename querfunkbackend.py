@@ -70,12 +70,12 @@ class Querfunkbackend(object):
         shows = querfunk.get_shows()
         existing_shows = dict()
         added_shows = dict()
-        for show_id, show_name in shows.items():
+        for show_id, data in shows.items():
             try:
-                self.backend_.add_show(show_id, show_name)
-                added_shows[show_id] = show_name
+                self.backend_.add_show(show_id, data['name'], data['description'], data['category'])
+                added_shows[show_id] = data['name']
             except:
-                existing_shows[show_id] = show_name
+                existing_shows[show_id] = data['name']
 
         #Create the calendar
 
@@ -265,7 +265,8 @@ class Backend(object):
                           IF NOT EXISTS 
                           shows(id INTEGER PRIMARY KEY,
                                 name TEXT,
-                                description TEXT) ''')
+                                description TEXT,
+                                category TEXT) ''')
             c.execute(''' CREATE TABLE 
                           IF NOT EXISTS 
                           show_user(show_user_id INTEGER PRIMARY KEY,
@@ -379,17 +380,19 @@ class Backend(object):
                 raise ValueError(ERROR_ADDEPISODE_MSG.format(str(data)))
 
 
-    def add_show(self, show_id, name, description=''):
+    def add_show(self, show_id, name, description='', category=''):
         with sqlite3.connect(DATABASE) as c:
             try:
                 c.execute(''' INSERT INTO 
                               shows(id,
                                     name, 
-                                    description) 
-                              VALUES (?, ?, ?) ''',
+                                    description,
+                                    category) 
+                              VALUES (?, ?, ?, ?) ''',
                           (show_id,
                            name,
-                           description))
+                           description,
+                           category))
             except ValueError:
                 raise ValueError(ERROR_ADDSHOW_MSG)
         self.log_.write_log(LOG_ADDEDSHOW_MSG.format(name, show_id))

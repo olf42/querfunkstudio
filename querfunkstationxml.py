@@ -47,11 +47,13 @@ class Schedule(object):
     def get_slot(self,week,day,slot):
         return self.schedule[week][day][slot]
 
-    def add_show_to_list(self, b_id, b_name):
+    def add_show_to_list(self, b_id, b_name, b_desc, b_cat):
         try:
             self.shows[b_id]
         except KeyError:
-            self.shows[b_id] = b_name
+            self.shows[b_id] = {"name" : b_name,
+                                "description" : b_desc,
+                                "category" : b_cat}
 
     def set_programflyer(self, programflyer):
             startdate = programflyer.find("startdate").text
@@ -64,15 +66,17 @@ class Schedule(object):
             broadcast_id = broadcast.attrib['id']
             sxml_info = broadcast.find("info")
             broadcast_name = sxml_info.find("name").text
-            self.add_show_to_list(broadcast_id, broadcast_name)
+            broadcast_desc = sxml_info.find("description").text
+            broadcast_cat = sxml_info.find("category").text
+            self.add_show_to_list(broadcast_id, broadcast_name, broadcast_desc, broadcast_cat)
             self.sxml_transmission = broadcast.find("transmissions")
-            self.parse_shows(broadcast_name, broadcast_id, "live")
+            self.parse_shows(broadcast_name, broadcast_id, "live", broadcast_desc, broadcast_cat)
             try:
-                self.parse_shows(broadcast_name, broadcast_id, "repeat")
+                self.parse_shows(broadcast_name, broadcast_id, "repeat", broadcast_desc, broadcast_cat)
             except:
                 pass
 
-    def parse_shows(self, name, b_id, keyword):
+    def parse_shows(self, name, b_id, keyword, b_desc, b_cat):
         for key in self.sxml_transmission.findall(keyword):
             week = int(key.find("week").text)
             day  = WEEKDAYS[key.find("day").text]
@@ -82,14 +86,14 @@ class Schedule(object):
                 self.add_show(int(week), day, time, {"id": b_id,
                                                      "length":length,
                                                      "name":name,
-                                                     "live":keyword})
+                                                     "live":keyword,
+                                                     "description":b_desc,
+                                                     "category":b_cat})
             except ValueError:
-                print("StationXML-File contains duplicates:")
-                print("Tried to add {3} in Week {0} on Day {1} at {2}:00".format(week,
-                                                                     day,
-                                                                     time,
-                                                                     name))
-                print("But this spot is already occupied by {0}".format(self.schedule[week][day][time]['name']))
+                raise ValueError(ERROR_STATIONXMLDUPLICATE.format(week,
+                                                                   day,
+                                                                   time,
+                                                                   name))
 
     def get_dates(self):
         keys = ["start", "end"]

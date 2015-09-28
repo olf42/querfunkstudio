@@ -59,6 +59,7 @@ ERROR_UPDATEUSER_MSG = "An error occured, while updating the show data."
 ERROR_STATIONXMLDATES_MSG = "The schedule has to end AFTER it begins!"
 ERROR_ADDEPISODE_MSG = "Adding the episode {0} was not possible."
 ERROR_CALENDAREXISTS_MSG = "There are already episodes in the calendar for {0}"
+ERROR_STATIONXMLDUPLICATE = "StationXML-File contains duplicates: Adding {3} in week {0} on day {1} at {2}:00 failed"
 
 SUCCESS_UPDATESHOW_MSG = "Show update successful."
 SUCCESS_UPDATEUSER_MSG = "User update successful."
