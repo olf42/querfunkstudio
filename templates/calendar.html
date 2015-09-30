@@ -12,28 +12,20 @@ Index
 			{% if calendar %}
 			<table class="table table-striped table-hover ">
                                         <thead>
-                                                <th>Date</th>
-                                                <th>Time</th>
-                                                <th>Length</th>
-                                                <th>Live</th>
+                                                <th>Timeslot</th>
                                                 <th>Name</th>
+                                                <th></th>
                                         </thead>
 					{% for event in calendar %}
 					<tr>
 						<td>
-							<a href="/admin/event?id={{event['cal_id']}}">{{event['day']}}.{{event['month']}}.{{event['year']}}</a>
+							{{event['day']}}.{{event['month']}}.{{event['year']}} - {{event['hour']}}:00
 						</td>
 						<td>
-							{{event['hour']}}:00
+							{% if event['live'] %}<b>{%endif%}<a href="/admin/show?id={{event['id']}}">{{event['name']}}</a>{% if event['live']%}</b>{% endif %}
 						</td>
 						<td>
-							{{event['length']}}
-						</td>
-						<td>
-							{{event['live']}}
-						</td>
-						<td>
-							<a href="/admin/show?id={{event['id']}}">{{event['name']}}</a>
+							<a href="/admin/event?id={{event['cal_id']}}" class='btn btn-default'>Details</a>
 						</td>
 					</tr>	
 				{% endfor %}
