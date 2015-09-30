@@ -14,7 +14,7 @@ Index
                                         <thead>
                                                 <th>ID</th>
                                                 <th>Alias</th>
-                                                <th>Details</th>
+                                                <th></th>
                                         </thead>
 					{% for schedule in schedules %}
 					<tr>
@@ -24,8 +24,8 @@ Index
 						<td>
 							{{ schedule.alias }}
 						</td>
-						<td>
-							<a href="/admin/schedule?id={{ schedule.id }}">Show</a>
+						<td class="text-right">
+							<a href="/admin/schedule?id={{ schedule.id }}" class="btn btn-default">Details</a>
 						</td>
 					</tr>	
 				{% endfor %}
