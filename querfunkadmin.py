@@ -153,6 +153,40 @@ class Querfunkadmin(object):
                                                              error=error)
 
     @cherrypy.expose
+    def event(self, **kwargs):
+        success = str()
+        error = str()
+        event = dict()
+
+        try:
+            user = self.user_.superuser_authenticated()
+        except ValueError as e:
+            return self.env.get_template('index.html').render(error=e)
+
+        if len(kwargs)>0:
+            # First we update the data, if necessary
+            if len(kwargs)>1:
+                try:
+                    success = self.backend_.update_event(kwargs)
+                except ValueError as e:
+                    error=str(e)
+            # Then we fetch data from the DB
+            try:
+                event_id = kwargs['id']
+                event, episodes = self.backend_.get_event(event_id)
+            except ValueError as e:
+                error+=str(e)
+        else:
+            error = ERROR_EVENTNOTFOUND_MSG
+
+        return self.env.get_template('event.html').render(event=event,
+                                                           error=error,
+                                                           episodes=episodes,
+                                                           success=success
+                                                          )
+
+
+    @cherrypy.expose
     def user(self, **kwargs):
 
         noshows = ERROR_NOSHOWSFOUND_MSG

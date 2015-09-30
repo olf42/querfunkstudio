@@ -263,6 +263,37 @@ class Querfunkbackend(object):
 
         return next_user_shows
 
+    def get_event(self, event_id):
+        try:
+            event = self.backend_.get_event(event_id)
+        except ValueError:
+            raise
+        episodes = self.backend_.get_episodes(event['id'])
+        return event, episodes
+
+    def update_event(self, kwargs):
+        try:
+            query = kwargs['query']
+        except:
+            raise ValueError(ERROR_INVALIDQUERY_MSG)
+
+        if query == "update":
+            try:
+                event_id = kwargs['id']
+                episode_id = kwargs['episode']
+            except:
+                raise ValueError(ERROR_INVALIDQUERY_MSG)
+
+            try:
+                self.backend_.update_event(event_id,
+                                          episode_id)
+            except:
+                raise
+        else:
+            raise ValueError(ERROR_INVALIDQUERY_MSG)
+        return SUCCESS_UPDATEEVENT_MSG
+
+
 class Backend(object):
 
     def __init__(self):
@@ -312,9 +343,22 @@ class Backend(object):
                                     description TEXT,
                                     file TEXT,
                                     gemafree INTEGER,
-                                    FOREIGN KEY(id) REFERENCES shows(id),
+                                    FOREIGN KEY(id) REFERENCES shows(id)
                                     )''')
             self.log_.write_log(LOG_TABLESCREATED_MSG)
+
+    def update_event(self, event_id, episode_id):
+        with sqlite3.connect(DATABASE) as c:
+            try:
+                c.execute(''' UPDATE 
+                              calendar
+                              SET episode_id = ?
+                              WHERE calendar_id = ? ''',
+                          (episode_id,
+                           event_id))
+            except:
+                raise #ValueError(ERROR_UPDATEEVENT_MSG)
+        self.log_.write_log(LOG_UPDATEDEVENT_MSG.format(event_id))
 
     def update_show(self, show_id, name, description):
         with sqlite3.connect(DATABASE) as c:
@@ -530,3 +574,43 @@ class Backend(object):
             for event in events:
                 result.append(dict(zip(keys,event)))
             return result
+
+    def get_episodes(self, show_id):
+        episodes = []
+        keys = ['id', 'title']
+        with sqlite3.connect(DATABASE) as c:
+            result = c.execute(''' SELECT episode_id,title 
+                                   FROM episodes
+                                   WHERE id=?''',
+                                (show_id,))
+        for item in result.fetchall():
+            episodes.append(dict(zip(keys, item)))
+        return episodes
+
+    def get_event(self, event_id):
+        keys = ['id',
+                'name',
+                'description',
+                'category',
+                'calendar_id',
+                'year',
+                'month',
+                'day',
+                'hour',
+                'length',
+                'live',
+                'stationxml_id',
+                'episode_id'
+                ]
+        with sqlite3.connect(DATABASE) as c:
+            result = c.execute(''' SELECT * 
+                                   FROM shows
+                                   JOIN calendar using(id)
+                                   WHERE calendar_id=?''',
+                                (event_id,))
+        try:
+            data = result.fetchall()
+        except:
+            raise ValueError(ERROR_EVENTNOTFOUND_MSG)
+
+        return dict(zip(keys, data[0]))
