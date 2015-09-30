@@ -53,6 +53,13 @@ class Querfunkbackend(object):
         else:
             raise ValueError(ERROR_NOSCHEDULESFOUND_MSG)
 
+    def get_calendar(self):
+        calendar = self.backend_.get_calendar()
+        if calendar:
+            return calendar
+        else:
+            raise ValueError(ERROR_NOCALENDARFOUND_MSG)
+
     def generate_calendar(self, schedule_id):
 
         # First, we check, if this schedule was already added
@@ -419,6 +426,27 @@ class Backend(object):
                                    WHERE stationxml_id=?''',
                                    (schedule_id,))
         return result.fetchall()
+
+    def get_calendar(self):
+        calendar_keys = ["id",
+                         "name",
+                         "description",
+                         "category",
+                         "cal_id",
+                         "year",
+                         "month",
+                         "day",
+                         "hour",
+                         "length",
+                         "live",
+                         "stationxml"]
+        calendar = []
+        with sqlite3.connect(DATABASE) as c:
+            result = c.execute(''' SELECT *
+                                   FROM shows JOIN calendar using (id)''')
+        for entry in result.fetchall():
+            calendar.append(dict(zip(calendar_keys,list(entry))))
+        return calendar
 
     def get_schedules(self):
         result = []

@@ -1,0 +1,48 @@
+{% extends "admin-base.html" %}
+
+{% block title %}
+Index
+{% endblock %}
+
+
+{% block content %}
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-8">
+			{% if calendar %}
+			<table class="table table-striped table-hover ">
+                                        <thead>
+                                                <th>Date</th>
+                                                <th>Time</th>
+                                                <th>Length</th>
+                                                <th>Live</th>
+                                                <th>Name</th>
+                                        </thead>
+					{% for event in calendar %}
+					<tr>
+						<td>
+							<a href="/admin/event?id={{event['cal_id']}}">{{event['day']}}.{{event['month']}}.{{event['year']}}</a>
+						</td>
+						<td>
+							{{event['hour']}}:00
+						</td>
+						<td>
+							{{event['length']}}
+						</td>
+						<td>
+							{{event['live']}}
+						</td>
+						<td>
+							<a href="/admin/show?id={{event['id']}}">{{event['name']}}</a>
+						</td>
+					</tr>	
+				{% endfor %}
+			</table>	
+			{% endif %}
+			</div>
+			<div class="col-md-2"></div>
+		</div><!-- /.row -->
+
+
+{% endblock %}
+

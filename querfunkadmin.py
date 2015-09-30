@@ -139,6 +139,20 @@ class Querfunkadmin(object):
                                                           superusers=superusers)
 
     @cherrypy.expose
+    def calendar(self):
+
+        error = str()
+
+        try:
+            user = self.user_.superuser_authenticated()
+        except ValueError as e:
+            return self.env.get_template('index.html').render(error=e)
+
+        calendar = self.backend_.get_calendar()
+        return self.env.get_template('calendar.html').render(calendar=calendar,
+                                                             error=error)
+
+    @cherrypy.expose
     def user(self, **kwargs):
 
         noshows = ERROR_NOSHOWSFOUND_MSG
