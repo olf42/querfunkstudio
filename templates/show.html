@@ -35,11 +35,28 @@
 				{{ nousers }}
 				</p>
 			{% endif %}
-			<ul>
-				{% for user in showusers %}
-					<li><a href="/admin/user?name={{ user }}">{{ user }}</a></li>
-				{% endfor %}
-			</ul>
+			{% if showusers %}
+				<table class="table table-striped table-hover ">
+                                        <thead>
+                                                <th>Name</th>
+                                                <th></th>
+                                        </thead>
+					{% for user in showusers %}
+					<tr>
+						<td>
+							<a href="/admin/user?name={{ user }}">{{ user }}</a>
+						</td>
+						<td class="text-right">
+							<form method="POST" action="/admin/show?id={{show_id}}">
+								<input type="hidden" name="query" value="remove">
+								<input type="hidden" name="user" value="{{ user }}">
+							<input type="submit" value="Remove" class="btn btn-primary">
+							</form>
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+			{% endif %}
 			{% if users %}
 			<form method="POST" action="/admin/show?id={{show_id}}">
                                         <fieldset>

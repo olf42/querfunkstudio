@@ -250,6 +250,19 @@ class Querfunkbackend(object):
                                           name)
             except:
                 raise
+        elif query == "remove":
+            try:
+                show_id = kwargs['id']
+                name = kwargs['user']
+            except:
+                raise ValueError(ERROR_INVALIDQUERY_MSG)
+
+            try:
+                self.backend_.remove_user_show(show_id,
+                                          name)
+            except:
+                raise
+
         else:
             raise ValueError(ERROR_INVALIDQUERY_MSG)
 
@@ -633,3 +646,12 @@ class Backend(object):
             raise ValueError(ERROR_EVENTNOTFOUND_MSG)
 
         return dict(zip(keys, data[0]))
+
+    def remove_user_show(self, show_id, name):
+        with sqlite3.connect(DATABASE) as c:
+            result = c.execute(''' DELETE
+                                   FROM show_user 
+                                   WHERE id=? 
+                                   AND username=?''',
+                                (show_id,
+                                 name))
