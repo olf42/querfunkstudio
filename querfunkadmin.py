@@ -128,15 +128,21 @@ class Querfunkadmin(object):
     @cherrypy.expose
     def users(self):
 
+        users = dict()
+
         try:
             user = self.user_.superuser_authenticated()
         except ValueError as e:
             return self.env.get_template('index.html').render(error=e)
 
-        users = self.backend_.get_users()
-        superusers = self.backend_.get_superusers()
-        return self.env.get_template('users.html').render(users=users,
-                                                          superusers=superusers)
+        for user in self.backend_.get_users():
+            users[user] = 0
+
+        for superuser in self.backend_.get_superusers():
+            users[superuser] = 1
+
+        print(users)
+        return self.env.get_template('users.html').render(users=users)
 
     @cherrypy.expose
     def calendar(self):
