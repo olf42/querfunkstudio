@@ -252,6 +252,7 @@ class Querfunkadmin(object):
         showdata = dict()
         error = str()
         success = str()
+        episodes = []
 
         try:
             user = self.user_.superuser_authenticated()
@@ -268,6 +269,7 @@ class Querfunkadmin(object):
             try:
                 show_id = kwargs['id']
                 showdata = self.backend_.get_showdata(show_id)
+                episodes = self.backend_.get_episodes(show_id)
             except ValueError as e:
                 error+=str(e)
 
@@ -282,6 +284,7 @@ class Querfunkadmin(object):
                                                         showusers=showusers,
                                                         users=users,
                                                         show_id=show_id,
+                                                        episodes=episodes,
                                                         success=success,
                                                         error=error,
                                                         nousers=nousers)

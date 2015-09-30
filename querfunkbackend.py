@@ -293,6 +293,12 @@ class Querfunkbackend(object):
             raise ValueError(ERROR_INVALIDQUERY_MSG)
         return SUCCESS_UPDATEEVENT_MSG
 
+    def get_episodes(self, show_id):
+        try:
+            episodes = self.backend_.get_episodes(show_id)
+        except:
+            raise
+        return episodes
 
 class Backend(object):
 

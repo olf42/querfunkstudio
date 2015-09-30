@@ -58,6 +58,26 @@
                                         </fieldset>
                                         </form>
 			{% endif %}
+			<h2>Episodes</h2>
+			{% if episodes %}
+				<table class="table table-striped table-hover ">
+                                        <thead>
+                                                <th>Name</th>
+                                                <th></th>
+                                        </thead>
+					{% for episode in episodes %}
+					<tr>
+						<td>
+							{{episode['title']}}
+						</td>
+						<td class="text-right">
+							<a href="/admin/episode?id={{episode['id']}}" class='btn btn-default'>Details</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+			{% endif %}
+			<a href="/admin/episode?show={{show_id}}" class="btn btn-primary">Add Episode</a>
 			</div>
 			<div class="col-md-2"></div>
 		</div><!-- /.row -->
