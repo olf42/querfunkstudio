@@ -376,6 +376,19 @@ class Backend(object):
         self.log_.write_log(LOG_UPDATEDSHOW_MSG.format(name))
 
     def add_user_show(self, show_id, name):
+        #Check for already existing connection user<->show
+        with sqlite3.connect(DATABASE) as c:
+            user_shows = c.execute('''SELECT *
+                                          FROM show_user
+                                          WHERE username=?
+                                          AND id=?''',
+                                          (name,
+                                              show_id))
+        for item in user_shows.fetchall():
+            if item:
+                raise ValueError(ERROR_ADDUSERSHOW_MSG)
+
+        #If not connection was found, we add it
         with sqlite3.connect(DATABASE) as c:
             try:
                 c.execute(''' INSERT INTO 
