@@ -27,6 +27,14 @@ Index
 						{% endfor %}
 					</ul>
 					{% endif %}
+					{% if next_shows %}
+					<h2>Next Events</h2>
+					<ul>
+						{% for event in next_shows %}
+						<li>{{event.day}}.{{event.month}}.{{event.year}} at {{event.hour}}:00 a {% if event.live%}live{% endif %}{% if not event.live %}repeat{% endif %}-show of <a href="/calendar?id={{event.cal_id}}">{{ event.name}}</a></li>
+						{% endfor %}
+					</ul>
+					{% endif %}
 				</div>
 			<div class="col-md-2"></div>
 		</div>

@@ -60,6 +60,8 @@ class Querfunkstudio(object):
             return self.env.get_template('index.html').render(error=e)
 
         superuser = False
+        next_shows = []
+        error = str()
 
         try:
             superuser = self.user_.superuser_authenticated()
@@ -71,9 +73,16 @@ class Querfunkstudio(object):
         except:
             pass
 
+        try:
+            next_shows = self.backend_.get_next_user_shows(user)
+        except ValueError as e:
+            error=e
+
         return self.env.get_template('start.html').render(username=user,
                                                           superuser=superuser,
-                                                          shows=shows)
+                                                          shows=shows,
+                                                          next_shows=next_shows,
+                                                          error=error)
 
     @cherrypy.expose
     def index(self, **kwargs):

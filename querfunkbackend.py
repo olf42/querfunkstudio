@@ -255,6 +255,13 @@ class Querfunkbackend(object):
 
         return SUCCESS_UPDATESHOW_MSG
 
+    def get_next_user_shows(self, username):
+        try:
+            next_user_shows = self.backend_.get_next_user_shows(username)
+        except ValueError:
+            raise
+
+        return next_user_shows
 
 class Backend(object):
 
@@ -293,8 +300,19 @@ class Backend(object):
                                     live INTEGER,
                                     id INTEGER,
                                     stationxml_id INTEGER,
+                                    episode_id INTEGER,
                                     FOREIGN KEY(id) REFERENCES shows(id),
                                     FOREIGN KEY(stationxml_id) REFERENCES stationxml(stationxml_id)
+                                    )''')
+            c.execute(''' CREATE TABLE
+                          IF NOT EXISTS
+                          episodes(episode_id INTEGER PRIMARY KEY,
+                                    id INTEGER,
+                                    title TEXT,
+                                    description TEXT,
+                                    file TEXT,
+                                    gemafree INTEGER,
+                                    FOREIGN KEY(id) REFERENCES shows(id),
                                     )''')
             self.log_.write_log(LOG_TABLESCREATED_MSG)
 
@@ -480,3 +498,35 @@ class Backend(object):
                     return True
                 else:
                     return False
+
+    def get_next_user_shows(self, username):
+        result = []
+        keys = ['name',
+                'cal_id',
+                'year',
+                'month',
+                'day',
+                'hour',
+                'live']
+        with sqlite3.connect(DATABASE) as c:
+            events = c.execute(''' SELECT name,
+                                          calendar_id,
+                                          year,
+                                          month,
+                                          day,
+                                          hour,
+                                          live
+                                   FROM shows 
+                                   JOIN calendar using(id)
+                                   JOIN show_user using(id)
+                                   WHERE username=?
+                                   ORDER BY year, month, day ASC''',
+                                (username,))
+            try:
+                events = events.fetchall()
+            except:
+                raise ValueError(ERROR_NOSHOWSFOUND_MSG)
+
+            for event in events:
+                result.append(dict(zip(keys,event)))
+            return result
