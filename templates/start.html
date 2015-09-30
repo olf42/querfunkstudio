@@ -15,8 +15,18 @@ Index
 		<div class="row">
 			<div class="col-md-2"></div>
 				<div class="col-md-8">
-					<h2>Logged in as {{username}}!</h2>
-					<p><a href="/start2">Proceed to Start2</a></p>
+					<h2>Hi {{username}}!</h2>
+					<hr>
+					{% if shows %}
+					<h2>My Shows</h2>
+					<ul>
+						{% for show in shows %}
+						<li>
+							<a href="/show?id={{show.show_id}}">{{show.show_name}}</a>
+						</li>
+						{% endfor %}
+					</ul>
+					{% endif %}
 				</div>
 			<div class="col-md-2"></div>
 		</div>

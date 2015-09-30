@@ -6,11 +6,13 @@ import os.path
 from querfunkconfig import *
 from querfunkuser import *
 from querfunktools import *
+from querfunkbackend import *
 
 class Querfunkstudio(object):
 
     def __init__(self, template_env):
         self.user_ = Querfunkuser()
+        self.backend_ = Querfunkbackend()
         self.env = template_env
 
     @cherrypy.expose
@@ -20,6 +22,7 @@ class Querfunkstudio(object):
         except ValueError as e:
             return self.env.get_template('index.html').render(error=e)
         cherrypy.session['username'] = None
+
         return self.env.get_template('index.html').render()
 
 
@@ -63,7 +66,14 @@ class Querfunkstudio(object):
         except:
             pass
 
-        return self.env.get_template('start.html').render(username=user, superuser=superuser)
+        try:
+            shows = self.backend_.get_user_shows(user)
+        except:
+            pass
+
+        return self.env.get_template('start.html').render(username=user,
+                                                          superuser=superuser,
+                                                          shows=shows)
 
     @cherrypy.expose
     def index(self, **kwargs):
